@@ -1,0 +1,133 @@
+{
+  "1-1": {
+    "basic": {
+      "HP": [6, 1],
+      "bullets": ["∞", "∞"],
+      "enemy": [5, 10]
+    },
+    "entity0": {
+      "0": {
+        "id": "Normal_cat",
+        "visible_time/ms": 2000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+      "id": "Normal_cat",
+      "visible_time/ms": 4000,
+      "pos": [
+      640,
+      0
+      ]
+      },
+      "2": {
+      "id": "Normal_cat",
+      "visible_time/ms": 6000,
+      "pos": [
+      640,
+      0
+      ]
+      },
+      "3": {
+      "id": "Normal_cat",
+      "visible_time/ms": 8000,
+      "pos": [
+      640,
+      0
+      ]
+      },
+      "4": {
+      "id": "Normal_cat",
+      "visible_time/ms": 10000,
+      "pos": [
+      640,
+      0
+      ]
+      }
+      },
+    "entity1": {
+      "0": {
+        "id": "Normal_cat",
+        "visible_time/ms": 2000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+        "id": "Normal_cat",
+        "visible_time/ms": 4000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "2": {
+        "id": "Normal_cat",
+        "visible_time/ms": 6000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "3": {
+        "id": "Normal_cat",
+        "visible_time/ms": 8000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "4": {
+        "id": "Normal_cat",
+        "visible_time/ms": 10000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "5": {
+        "id": "Normal_cat",
+        "visible_time/ms": 12000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Normal_cat",
+        "visible_time/ms": 14000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "7": {
+        "id": "Normal_cat",
+        "visible_time/ms": 16000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "8": {
+        "id": "Normal_cat",
+        "visible_time/ms": 18000,
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "9": {
+        "id": "Normal_cat",
+        "visible_time/ms": 20000,
+        "pos": [
+          640,
+          0
+        ]
+      }
+    }
+  }
+}

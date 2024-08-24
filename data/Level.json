@@ -1,0 +1,26 @@
+{
+  "Level1": {
+    "0": {
+      "Level_id": 0,
+      "Title": "1-1 枪械",
+      "Description": "学习使用枪械攻击。",
+      "Lock_Description": "",
+      "Position": [
+        200,
+        200
+      ],
+      "Type": 0
+    },
+    "1": {
+      "Level_id": 1,
+      "Title": "1-2 入侵",
+      "Description": "一批施朗发起了进攻，请使用枪械进行反击。",
+      "Lock_Description": "完成1-1解锁",
+      "Position": [
+        400,
+        200
+      ],
+      "Type": 0
+    }
+  }
+}

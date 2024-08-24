@@ -1,0 +1,15 @@
+{
+  "Normal_cat": {
+    "HP": 20,
+    "Def": 0,
+    "Speed": 3,
+    "Enemy_type": 0,
+    "invincible_time": 100,
+    "scale": [
+      100,
+      120
+    ],
+    "Animation_count": 2,
+    "Image_type": ".svg"
+  }
+}
