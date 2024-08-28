@@ -5,6 +5,35 @@
     "Speed": 3,
     "Enemy_type": 0,
     "invincible_time": 100,
+    "minus_HP": 1,
+    "scale": [
+      100,
+      120
+    ],
+    "Animation_count": 2,
+    "Image_type": ".svg"
+  },
+  "Primary_High_speed_cat": {
+    "HP": 20,
+    "Def": 0,
+    "Speed": 5,
+    "Enemy_type": 0,
+    "invincible_time": 100,
+    "minus_HP": 1,
+    "scale": [
+      100,
+      120
+    ],
+    "Animation_count": 2,
+    "Image_type": ".svg"
+  },
+  "Green_cat": {
+    "HP": 30,
+    "Def": 3,
+    "Speed": 4,
+    "Enemy_type": 0,
+    "invincible_time": 200,
+    "minus_HP": 1,
     "scale": [
       100,
       120

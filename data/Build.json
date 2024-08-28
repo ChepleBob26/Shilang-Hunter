@@ -1,0 +1,14 @@
+{
+  "0": {
+    "name": "Landmine",
+    "type": "passive_attack",
+    "damage": 50,
+    "damage_type": true,
+    "cost": 6,
+    "Image_type": ".png",
+    "scale": [
+      100,
+      60
+    ]
+  }
+}

@@ -1,74 +1,16 @@
 {
     "name": [
-        "1",
-        "2",
-        "3",
-        "Shitlang"
     ],
     "password": [
-        "1",
-        "2",
-        "3",
-        "114514"
     ],
     "level": [
-        1,
-        1,
-        1,
-        1
     ],
     "progress": [
-        [
-            0,
-            -1
-        ],
-        [
-            0,
-            -1
-        ],
-        [
-            0,
-            -1
-        ],
-        [
-            0,
-            -1
-        ]
     ],
     "setting": [
-        {
-            "bullet_visible": false,
-            "dock_hidden": true,
-            "full_screen": false
-        },
-        {
-            "bullet_visible": true,
-            "dock_hidden": true,
-            "full_screen": false
-        },
-        {
-            "bullet_visible": true,
-            "dock_hidden": true,
-            "full_screen": false
-        },
-        {
-            "bullet_visible": true,
-            "dock_hidden": true,
-            "full_screen": true
-        }
     ],
     "gun_level": [
-        [
-            0
-        ],
-        [
-            0
-        ],
-        [
-            0
-        ],
-        [
-            0
-        ]
+    ],
+    "equipment_level": [
     ]
 }

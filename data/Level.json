@@ -9,18 +9,32 @@
         200,
         200
       ],
-      "Type": 0
+      "Type": 0,
+      "Unlock_Level_id": 1
     },
     "1": {
       "Level_id": 1,
       "Title": "1-2 入侵",
       "Description": "一批施朗发起了进攻，请使用枪械进行反击。",
-      "Lock_Description": "完成1-1解锁",
+      "Lock_Description": "完成1-1",
       "Position": [
         400,
         200
       ],
-      "Type": 0
+      "Type": 0,
+      "Unlock_Level_id": 2
+    },
+    "2": {
+      "Level_id": 2,
+      "Title": "1-3 施朗",
+      "Description": "一些高速施朗和绿色施朗也加入了战斗。",
+      "Lock_Description": "完成1-2",
+      "Position": [
+        600,
+        200
+      ],
+      "Type": 0,
+      "Unlock_Level_id": "null"
     }
   }
 }

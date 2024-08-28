@@ -1,0 +1,126 @@
+{
+  "Normal": {
+    "Status_count": 1,
+    "Status": [
+      {
+        "direction": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "time/ms": 100
+      }
+    ]
+  },
+  "Left": {
+    "Status_count": 2,
+    "Status": [
+      {
+        "direction": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "time/ms": 1000
+      },
+      {
+        "direction": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "time/ms": 1000
+      }
+    ]
+  },
+  "Right": {
+    "Status_count": 2,
+    "Status": [
+      {
+        "direction": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "time/ms": 1000
+      },
+      {
+        "direction": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "time/ms": 1000
+      }
+    ]
+  },
+  "Left_down": {
+    "Status_count": 3,
+    "Status": [
+      {
+        "direction": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "time/ms": 1000
+      },
+      {
+        "direction": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "time/ms": 2000
+      },
+      {
+        "direction": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "time/ms": 100000
+      }
+    ]
+  },
+  "Right_down": {
+    "Status_count": 3,
+    "Status": [
+      {
+        "direction": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "time/ms": 1000
+      },
+      {
+        "direction": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "time/ms": 2000
+      },
+      {
+        "direction": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "time/ms": 100000
+      }
+    ]
+  }
+}

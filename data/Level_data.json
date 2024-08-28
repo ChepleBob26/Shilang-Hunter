@@ -1,56 +1,18 @@
 {
   "1-1": {
     "basic": {
-      "HP": [6, 1],
-      "bullets": ["∞", "∞"],
-      "enemy": [5, 10]
+      "HP": [5, 1],
+      "bullets": [999, "∞"],
+      "enemy": [5, 10],
+      "cost_recover_speed": [500, 1000],
+      "Deployment_ceiling": [10, 0],
+      "danger_line": "height"
     },
     "entity0": {
       "0": {
         "id": "Normal_cat",
         "visible_time/ms": 2000,
-        "pos": [
-          640,
-          0
-        ]
-      },
-      "1": {
-      "id": "Normal_cat",
-      "visible_time/ms": 4000,
-      "pos": [
-      640,
-      0
-      ]
-      },
-      "2": {
-      "id": "Normal_cat",
-      "visible_time/ms": 6000,
-      "pos": [
-      640,
-      0
-      ]
-      },
-      "3": {
-      "id": "Normal_cat",
-      "visible_time/ms": 8000,
-      "pos": [
-      640,
-      0
-      ]
-      },
-      "4": {
-      "id": "Normal_cat",
-      "visible_time/ms": 10000,
-      "pos": [
-      640,
-      0
-      ]
-      }
-      },
-    "entity1": {
-      "0": {
-        "id": "Normal_cat",
-        "visible_time/ms": 2000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -59,6 +21,54 @@
       "1": {
         "id": "Normal_cat",
         "visible_time/ms": 4000,
+        "path": "Normal",
+        "pos": [
+        640,
+        0
+        ]
+      },
+      "2": {
+        "id": "Normal_cat",
+        "visible_time/ms": 6000,
+        "path": "Normal",
+        "pos": [
+        640,
+        0
+        ]
+      },
+      "3": {
+        "id": "Normal_cat",
+        "visible_time/ms": 8000,
+        "path": "Normal",
+        "pos": [
+        640,
+        0
+        ]
+      },
+      "4": {
+        "id": "Normal_cat",
+        "visible_time/ms": 10000,
+        "path": "Normal",
+        "pos": [
+        640,
+        0
+        ]
+      }
+    },
+    "entity1": {
+      "0": {
+        "id": "Normal_cat",
+        "visible_time/ms": 2000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+        "id": "Normal_cat",
+        "visible_time/ms": 4000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -67,6 +77,7 @@
       "2": {
         "id": "Normal_cat",
         "visible_time/ms": 6000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -75,6 +86,7 @@
       "3": {
         "id": "Normal_cat",
         "visible_time/ms": 8000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -83,6 +95,7 @@
       "4": {
         "id": "Normal_cat",
         "visible_time/ms": 10000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -91,6 +104,7 @@
       "5": {
         "id": "Normal_cat",
         "visible_time/ms": 12000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -99,6 +113,7 @@
       "6": {
         "id": "Normal_cat",
         "visible_time/ms": 14000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -107,6 +122,7 @@
       "7": {
         "id": "Normal_cat",
         "visible_time/ms": 16000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -115,6 +131,7 @@
       "8": {
         "id": "Normal_cat",
         "visible_time/ms": 18000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -123,8 +140,577 @@
       "9": {
         "id": "Normal_cat",
         "visible_time/ms": 20000,
+        "path": "Normal",
         "pos": [
           640,
+          0
+        ]
+      }
+    }
+  },
+  "1-2": {
+    "basic": {
+      "HP": [5, 1],
+      "bullets": ["∞", "∞"],
+      "enemy": [10, 15],
+      "cost_recover_speed": [500, 1000],
+      "Deployment_ceiling": [10, 0],
+      "danger_line": "height"
+    },
+    "entity0": {
+      "0": {
+        "id": "Normal_cat",
+        "visible_time/ms": 2000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+        "id": "Normal_cat",
+        "visible_time/ms": 3000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "2": {
+        "id": "Normal_cat",
+        "visible_time/ms": 4000,
+        "path": "Normal",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "3": {
+        "id": "Normal_cat",
+        "visible_time/ms": 5000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "4": {
+        "id": "Normal_cat",
+        "visible_time/ms": 5000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "5": {
+        "id": "Normal_cat",
+        "visible_time/ms": 5000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Normal_cat",
+        "visible_time/ms": 6000,
+        "path": "Normal",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "7": {
+        "id": "Normal_cat",
+        "visible_time/ms": 6500,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "8": {
+        "id": "Normal_cat",
+        "visible_time/ms": 7000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "9": {
+        "id": "Normal_cat",
+        "visible_time/ms": 8000,
+        "path": "Left",
+        "pos": [
+          640,
+          0
+        ]
+      }
+    },
+    "entity1": {
+            "0": {
+        "id": "Normal_cat",
+        "visible_time/ms": 2000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+        "id": "Normal_cat",
+        "visible_time/ms": 3000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "2": {
+        "id": "Normal_cat",
+        "visible_time/ms": 4000,
+        "path": "Normal",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "3": {
+        "id": "Normal_cat",
+        "visible_time/ms": 5000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "4": {
+        "id": "Normal_cat",
+        "visible_time/ms": 5000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "5": {
+        "id": "Normal_cat",
+        "visible_time/ms": 5000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Normal_cat",
+        "visible_time/ms": 6000,
+        "path": "Normal",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "7": {
+        "id": "Normal_cat",
+        "visible_time/ms": 6500,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "8": {
+        "id": "Normal_cat",
+        "visible_time/ms": 7000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "9": {
+        "id": "Normal_cat",
+        "visible_time/ms": 8000,
+        "path": "Left",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "10": {
+        "id": "Normal_cat",
+        "visible_time/ms": 9000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "11": {
+        "id": "Normal_cat",
+        "visible_time/ms": 9000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "12": {
+        "id": "Normal_cat",
+        "visible_time/ms": 9000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "13": {
+        "id": "Normal_cat",
+        "visible_time/ms": 12000,
+        "path": "Left",
+        "pos": [
+          360,
+          0
+        ]
+      },
+      "14": {
+        "id": "Normal_cat",
+        "visible_time/ms": 12000,
+        "path": "Right",
+        "pos": [
+          920,
+          0
+        ]
+      }
+    }
+  },
+  "1-3": {
+    "basic": {
+      "HP": [3, 1],
+      "bullets": ["∞", "∞"],
+      "enemy": [15, 20],
+      "cost_recover_speed": [500, 1000],
+      "Deployment_ceiling": [10, 0],
+      "danger_line": "height"
+    },
+    "entity0": {
+      "0": {
+        "id": "Normal_cat",
+        "visible_time/ms": 2000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 4000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "2": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 5000,
+        "path": "Normal",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "3": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 6000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "4": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 7000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "5": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 7000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 7000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "7": {
+        "id": "Green_cat",
+        "visible_time/ms": 9000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "8": {
+        "id": "Normal_cat",
+        "visible_time/ms": 10000,
+        "path": "Left",
+        "pos": [
+          560,
+          0
+        ]
+      },
+      "9": {
+        "id": "Normal_cat",
+        "visible_time/ms": 10000,
+        "path": "Right",
+        "pos": [
+          720,
+          0
+        ]
+      },
+      "10": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 12000,
+        "path": "Normal",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "11": {
+        "id": "Green_cat",
+        "visible_time/ms": 13000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "12": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 15000,
+        "path": "Right",
+        "pos": [
+          920,
+          0
+        ]
+      },
+      "13": {
+        "id": "Green_cat",
+        "visible_time/ms": 16000,
+        "path": "Left",
+        "pos": [
+          360,
+          0
+        ]
+      },
+      "14": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 18000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      }
+    },
+    "entity1": {
+      "0": {
+        "id": "Normal_cat",
+        "visible_time/ms": 2000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 4000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "2": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 5000,
+        "path": "Normal",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "3": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 6000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "4": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 7000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "5": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 7000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 7000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "7": {
+        "id": "Green_cat",
+        "visible_time/ms": 9000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "8": {
+        "id": "Normal_cat",
+        "visible_time/ms": 10000,
+        "path": "Left",
+        "pos": [
+          560,
+          0
+        ]
+      },
+      "9": {
+        "id": "Normal_cat",
+        "visible_time/ms": 10000,
+        "path": "Right",
+        "pos": [
+          720,
+          0
+        ]
+      },
+      "10": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 12000,
+        "path": "Normal",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "11": {
+        "id": "Green_cat",
+        "visible_time/ms": 13000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "12": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 15000,
+        "path": "Right",
+        "pos": [
+          920,
+          0
+        ]
+      },
+      "13": {
+        "id": "Green_cat",
+        "visible_time/ms": 16000,
+        "path": "Left",
+        "pos": [
+          360,
+          0
+        ]
+      },
+      "14": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 18000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "15": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 21000,
+        "path": "Left_down",
+        "pos": [
+          80,
+          0
+        ]
+      },
+      "16": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 21000,
+        "path": "Normal",
+        "pos": [
+          1200,
+          0
+        ]
+      },
+      "17": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 21000,
+        "path": "Right_down",
+        "pos": [
+          920,
+          0
+        ]
+      },
+      "18": {
+        "id": "Green_cat",
+        "visible_time/ms": 24000,
+        "path": "Left",
+        "pos": [
+          360,
+          0
+        ]
+      },
+      "19": {
+        "id": "Green_cat",
+        "visible_time/ms": 26000,
+        "path": "Right",
+        "pos": [
+          920,
           0
         ]
       }

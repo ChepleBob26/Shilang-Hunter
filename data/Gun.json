@@ -1,6 +1,6 @@
 {
   "0": {
-    "basic_damage": 4,
+    "basic_damage": 7,
     "time/ms": 100,
     "cool_time/ms": 300,
     "special": 0,
@@ -8,6 +8,7 @@
     "max_accumulation": 3,
     "initial_bullet_cap": 6,
     "each_update_bullet_cap": 3,
+    "each_update_damage": 1.5,
     "max_level": 4,
     "scale": 100
   }
