@@ -28,7 +28,7 @@ pygame.init()
 pygame.mixer.init()
 clock: any = pygame.time.Clock()
 tick_frequency: int = 60
-version: str = "1.1.0"
+version: str = "1.1.1"
 date: str = datetime.now().strftime("%m-%d")
 # date: str = "04-01"
 if date == "04-01" or date == "05-13":  # 游戏标题和图标初始化
@@ -93,13 +93,12 @@ if date == "04-01" or date == "05-13":  # 常用的一些图片
                                "assets/images/Shilang_input_box_active.png", "assets/images/Shilang_icon.png",
                                "assets/images/background_Uh.png", "assets/images/Shilang_switch_active.png"]
     pygame.mixer.music.load("assets/sounds/Shilang.wav")
+    pygame.mixer_music.play(-1)
 else:
     image_usually_use: list = ["assets/images/button.png", "assets/images/button_hover.png",
                                "assets/images/button_click.png", "assets/images/input_box.png",
                                "assets/images/input_box_active.png", "assets/images/popup_block.png",
                                "assets/images/Switch_inactive.png", "assets/images/Switch_active.png"]
-    pygame.mixer.music.load("assets/sounds/Bgm.mp3")
-# pygame.mixer_music.play(-1)
 
 
 class Mouse:
@@ -746,7 +745,7 @@ class CustomInputBox:
         self.txt_surface: any = self.font.render(self.text, True, self.text_color)
         self.update_rect()
 
-    def update(self) -> None:
+    def cursor_update(self) -> None:
         """控制光标的闪烁"""
         current_time: int = pygame.time.get_ticks()
         if current_time - self.cursor_blink_timer > self.cursor_blink_interval:
@@ -769,7 +768,7 @@ class CustomInputBox:
     def handle_event(self, events: any, can_active: bool) -> None:
         """处理事件"""
         self.can_active: bool = can_active
-        if events.type == pygame.MOUSEBUTTONDOWN and self.can_active:
+        if events.type == pygame.MOUSEBUTTONDOWN and events.button == 1 and self.can_active:
             # 如果点击输入框,则激活或取消激活
             if self.rect.collidepoint(events.pos):
                 if date == "04-01" or date == "05-13":
@@ -911,6 +910,7 @@ class EntityCreate:
         self.approve_damage_text: bool = False
         self.difficult: int = difficult
         self.gun_damage: any = 0
+        self.continue_count: int = 0
         self.basic_information: any = None
         self.hp: list = []
         self.location: list = []
@@ -928,6 +928,8 @@ class EntityCreate:
         self.can_change_walk_status: list[bool] = []
         self.last_can_change_walk_status: list[bool] = []
         self.walk_status_time: list[int] = []
+        self.load_source: list = []
+        self.load_tag: list[str] = []
         for x in range(json_str[f"{level}-{stage}"]["basic"]["enemy"][difficult]):
             (self.location.append([Decimal(str(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"{x}"]["pos"][0])) *
                                    Decimal(str(self.multiple_width)),
@@ -1004,23 +1006,40 @@ class EntityCreate:
             f.close()
         for x in range(json_str2[f"{self.level}-{self.stage}"]["basic"]["enemy"][self.difficult]):  # 对每个敌人进行操作
             if self.blit[x]:  # 如果允许输出就开始操作
-                entity_image: any = pygame.image.load(f"assets/images/{json_str2[f"{self.level}-{self.stage}"]
-                                                                                [f"entity{self.difficult}"][f"{x}"]
-                                                                                ["id"]}{
+                if (f"assets/images/{json_str2[f"{self.level}-{self.stage}"]
+                                              [f"entity{self.difficult}"][f"{x}"]["id"]}{
                     self.animation[x]}{
                     json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
-                            ["Image_type"]}")  # 控制加载图片
+                        ["Image_type"]}" in self.load_tag):
+                    entity_image: any = self.load_source[self.load_tag.index(f"assets/images/{
+                        json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]}{
+                        self.animation[x]}{
+                        json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
+                        ["Image_type"]}")]
+                else:
+                    entity_image: any = pygame.image.load(f"assets/images/{json_str2[f"{self.level}-{self.stage}"]
+                                                                                    [f"entity{self.difficult}"]
+                                                                                    [f"{x}"]["id"]}{
+                        self.animation[x]}{
+                        json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
+                                ["Image_type"]}")  # 控制加载图片
+                    entity_image: any = pygame.transform.scale(entity_image, (
+                        json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
+                        ["scale"][0],
+                        json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
+                        ["scale"][1]))  # 修改图片尺寸
+                    self.load_source.append(entity_image)
+                    self.load_tag.append(f"assets/images/{json_str2[f"{self.level}-{self.stage}"]
+                                                                   [f"entity{self.difficult}"][f"{x}"]["id"]}{
+                        self.animation[x]}{
+                        json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
+                                ["Image_type"]}")
                 if can_active:
                     if (self.animation[x] >= json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
                                                                [f"{x}"]["id"]]["Animation_count"]):  # 切换图片以实现动画
                         self.animation[x] = 1
                     else:
                         self.animation[x] += 1
-                entity_image: any = pygame.transform.scale(entity_image, (
-                    json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
-                    ["scale"][0],
-                    json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
-                    ["scale"][1]))  # 修改图片尺寸
                 if can_active:  # 移动
                     if json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
                                                    ["path"]]["Status"][self.path_count[x]]["direction"][0]:
@@ -1089,7 +1108,7 @@ class EntityCreate:
                     else:
                         soundtrack.music_play(0, "assets/sounds/Alert.wav", False)
                     self.blit[x] = False
-                    return
+                    continue
                 if can_active:
                     for y in range(len(build_active)):
                         if build_active[y]:
@@ -1133,7 +1152,7 @@ class EntityCreate:
                         self.is_dead[x] = True
                         self.dead_image[x] = entity_image
                         self.dead_rect[x] = entity_rect
-                        return
+                        continue
                     if not self.can_hit[x]:  # 无敌时间闪烁效果
                         self.blink[x] = not self.blink[x]
                     if (pygame.time.get_ticks() - self.total_frozen_time - self.invincible_time[x] -
@@ -1197,7 +1216,10 @@ class DamageText:
 
     def draw(self) -> None:
         """绘制文本"""
-        for x in range(len(self.text_surface)):
+        continue_count: int = 0
+        for y in range(len(self.text_surface)):
+            print(self.text_surface)
+            x: int = y - continue_count
             if self.temp[x] != 30:
                 self.temp[x] += 1
                 self.text_surface[x].set_alpha(255 - self.temp[x] * (255 / 30))
@@ -1207,6 +1229,10 @@ class DamageText:
                                                                       self.text_rect[x][1] - self.temp[x] * 3))
                 screen.blit(transparent_surface, text_rect)
             else:
+                continue_count += 1
+                del self.temp[x]
+                del self.text_rect[x]
+                del self.text_surface[x]
                 continue
 
 
@@ -1372,33 +1398,34 @@ class GameGun:
                     self.reload: bool = False
             elif not pygame.key.get_pressed()[pygame.K_e] and self.change_gun_action:
                 self.change_gun_action: bool = False
-            if pygame.key.get_pressed()[pygame.K_r] and self.reload and self.reload_action:  # 补充子弹
-                if isinstance(self.bullets, int) and self.bullets > 0:
-                    if date == "04-01" or date == "05-13":
-                        soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
-                    else:
-                        soundtrack.music_play(0, "assets/sounds/reload.wav", False)
-                    self.reload_action: bool = False
-                    self.surplus_bullets += 1
-                    if isinstance(self.bullets, int):  # 根据是否是无限子弹区分不同处理方法
-                        self.bullets -= 1
-                    if (self.surplus_bullets == self.json_str2[f"{self.gun_type}"]["initial_bullet_cap"] +
-                            self.json_str["gun_level"][self.account][self.gun_type] *
-                            self.json_str2[f"{self.gun_type}"]["each_update_bullet_cap"]):
-                        self.reload: bool = False
-                elif isinstance(self.bullets, str):
-                    if date == "04-01" or date == "05-13":
-                        soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
-                    else:
-                        soundtrack.music_play(0, "assets/sounds/reload.wav", False)
-                    self.reload_action: bool = False
-                    self.surplus_bullets += 1
-                    if (self.surplus_bullets == self.json_str2[f"{self.gun_type}"]["initial_bullet_cap"] +
-                            self.json_str["gun_level"][self.account][self.gun_type] *
-                            self.json_str2[f"{self.gun_type}"]["each_update_bullet_cap"]):
-                        self.reload: bool = False
-            elif not pygame.key.get_pressed()[pygame.K_r] and self.reload and not self.reload_action:
-                self.reload_action: bool = True
+            for x in pygame.event.get():
+                if x.type == pygame.MOUSEWHEEL and self.reload and self.reload_action:  # 补充子弹
+                    if isinstance(self.bullets, int) and self.bullets > 0:
+                        if date == "04-01" or date == "05-13":
+                            soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
+                        else:
+                            soundtrack.music_play(0, "assets/sounds/reload.wav", False)
+                        self.reload_action: bool = False
+                        self.surplus_bullets += 1
+                        if isinstance(self.bullets, int):  # 根据是否是无限子弹区分不同处理方法
+                            self.bullets -= 1
+                        if (self.surplus_bullets == self.json_str2[f"{self.gun_type}"]["initial_bullet_cap"] +
+                                self.json_str["gun_level"][self.account][self.gun_type] *
+                                self.json_str2[f"{self.gun_type}"]["each_update_bullet_cap"]):
+                            self.reload: bool = False
+                    elif isinstance(self.bullets, str):
+                        if date == "04-01" or date == "05-13":
+                            soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
+                        else:
+                            soundtrack.music_play(0, "assets/sounds/reload.wav", False)
+                        self.reload_action: bool = False
+                        self.surplus_bullets += 1
+                        if (self.surplus_bullets == self.json_str2[f"{self.gun_type}"]["initial_bullet_cap"] +
+                                self.json_str["gun_level"][self.account][self.gun_type] *
+                                self.json_str2[f"{self.gun_type}"]["each_update_bullet_cap"]):
+                            self.reload: bool = False
+                elif x.type != pygame.MOUSEWHEEL and self.reload and not self.reload_action:
+                    self.reload_action: bool = True
             if (pygame.mouse.get_pressed()[0] and not self.shoot[0] and self.can_action and self.surplus_bullets > 0 and
                     not self.reload):  # 开枪
                 self.can_action: bool = False
@@ -1620,8 +1647,8 @@ class Pages:
                 else:
                     self.link_up.exit()
                     if not self.link_up.can_exit:
-                        pass
-                        # pygame.mixer_music.play(-1)
+                        if date == "04-01" or date == "05-13":
+                            pygame.mixer_music.play(-1)
             else:
                 self.link_up.access(100)
             # 事件处理
@@ -1794,7 +1821,7 @@ class Pages:
             self.bg.update()
             self.bg.draw()
             if input_box1.active:
-                input_box1.update()
+                input_box1.cursor_update()
             else:
                 input_box1.cursor_visible = False
             if button1.draw(50, (180, 180, 180), (255, 255, 255),
@@ -1901,11 +1928,11 @@ class Pages:
             self.bg.update()
             self.bg.draw()
             if input_box1.active:
-                input_box1.update()
+                input_box1.cursor_update()
             else:
                 input_box1.cursor_visible = False
             if input_box2.active:
-                input_box2.update()
+                input_box2.cursor_update()
             else:
                 input_box2.cursor_visible = False
             self.custom_text.draw()
@@ -2067,11 +2094,11 @@ class Pages:
             self.bg.update()
             self.bg.draw()
             if input_box1.active:
-                input_box1.update()
+                input_box1.cursor_update()
             else:
                 input_box1.cursor_visible = False
             if input_box2.active:
-                input_box2.update()
+                input_box2.cursor_update()
             else:
                 input_box2.cursor_visible = False
             self.custom_text.draw()
@@ -2737,23 +2764,23 @@ class Pages:
             self.bg.update()
             self.bg.draw()
             if input_box1.active:
-                input_box1.update()
+                input_box1.cursor_update()
             else:
                 input_box1.cursor_visible = False
             if input_box2.active:
-                input_box2.update()
+                input_box2.cursor_update()
             else:
                 input_box2.cursor_visible = False
             if input_box3.active:
-                input_box3.update()
+                input_box3.cursor_update()
             else:
                 input_box3.cursor_visible = False
             if input_box4.active:
-                input_box4.update()
+                input_box4.cursor_update()
             else:
                 input_box4.cursor_visible = False
             if input_box5.active:
-                input_box5.update()
+                input_box5.cursor_update()
             else:
                 input_box5.cursor_visible = False
             if button1.draw(50, (180, 180, 180), (255, 255, 255),
