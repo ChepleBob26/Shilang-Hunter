@@ -3,9 +3,9 @@
 Shilang Hunter
 A GUI program.
 - Functionality: Shoot and defeat Shilang.
-- Developers: Bob.
+- Developers: Cheple_Bob.
 - Special Thanks: Gavin - Give some advice to improve Shilang_Hunter.
-- Dependencies: pygame >= 2.5.2.
+- Dependencies: pygame >= 2.5.2， python >= 3.12.
 - Usage Instructions: How to run or use the program.
     Example Usage:
     python3 main.py
@@ -14,10 +14,10 @@ Also, Please ensure that requirements.txt packs is already installed before runn
 - Warning: Don't open this program on April 1st and May 13th!(Just For Fun!)
 (Except for these two days, no code will torture the user.)
 """
-from pygame.locals import *
 from decimal import Decimal
-import pygame
 from datetime import datetime
+from pygame import *
+import pygame
 import json
 from os import chdir, path
 from typing import Union
@@ -27,22 +27,22 @@ pygame.init()
 # 初始化音频
 pygame.mixer.init()
 clock: any = pygame.time.Clock()
-tick_frequency: int = 60
-version: str = "1.1.1"
+tick_frequency: int = 30
+game_version: str = "1.2.2"
 date: str = datetime.now().strftime("%m-%d")
 # date: str = "04-01"
 if date == "04-01" or date == "05-13":  # 游戏标题和图标初始化
     game_icon: any = pygame.image.load("assets/images/Shilang_icon.png")
-    game_caption: str = f"你施朗了 {version}"
+    game_caption: str = f"你施朗了 {game_version}"
 else:
     game_icon: any = pygame.image.load("assets/images/icon.png")
-    game_caption: str = f"施朗猎人 {version}"
+    game_caption: str = f"施朗猎人 {game_version}"
 pygame.display.set_icon(game_icon)
 pygame.display.set_caption(game_caption)
-with open("data/Idea.json") as c:
+with open("data/Idea.json", encoding="UTF-8") as c:
     json_str11: any = json.load(c)
     c.close()
-with open("data/User.json") as c:
+with open("data/User.json", encoding="UTF-8") as c:
     json_str12: any = json.load(c)
     c.close()
 full_width: int = pygame.display.Info().current_w  # 全屏情况下的长和宽
@@ -91,14 +91,14 @@ if date == "04-01" or date == "05-13":  # 常用的一些图片
     image_usually_use: list = ["assets/images/Shilang_button.png", "assets/images/Shilang_button_active.png",
                                "assets/images/Shilang_button_active.png", "assets/images/Shilang_input_box.png",
                                "assets/images/Shilang_input_box_active.png", "assets/images/Shilang_icon.png",
-                               "assets/images/background_Uh.png", "assets/images/Shilang_switch_active.png"]
-    pygame.mixer.music.load("assets/sounds/Shilang.wav")
-    pygame.mixer_music.play(-1)
+                               "assets/images/background_Uh.png", "assets/images/Shilang_switch_active.png",
+                               "assets/images/background_load_lang.png", "assets/images/background_load_lang.png"]
 else:
     image_usually_use: list = ["assets/images/button.png", "assets/images/button_hover.png",
                                "assets/images/button_click.png", "assets/images/input_box.png",
                                "assets/images/input_box_active.png", "assets/images/popup_block.png",
-                               "assets/images/Switch_inactive.png", "assets/images/Switch_active.png"]
+                               "assets/images/Switch_inactive.png", "assets/images/Switch_active.png",
+                               "assets/images/Popups.png", "assets/images/Popups.png"]
 
 
 class Mouse:
@@ -124,11 +124,11 @@ class Mouse:
         else:
             self.activate: bool = False
         if date == "04-01" or date == "05-13":
-            mouse: any = pygame.image.load("assets/images/Shilang_switch_active.png")
+            mouse1: any = pygame.image.load("assets/images/Shilang_switch_active.png")
         else:
-            mouse: any = pygame.image.load("assets/images/Mouse.png")
-        mouse: any = pygame.transform.scale(mouse, (30, 30))  # 绘制鼠标和点击特效
-        screen.blit(mouse, mouse_pos)
+            mouse1: any = pygame.image.load("assets/images/Mouse.png")
+        mouse1: any = pygame.transform.scale(mouse1, (30, 30))  # 绘制鼠标和点击特效
+        screen.blit(mouse1, mouse_pos)
 
     def click_activate(self) -> None:
         """激活上方的click方法"""
@@ -141,8 +141,13 @@ class PopupMessage:
     """设置弹窗"""
 
     def __init__(self, popup_width: int, popup_height: int, img_path: str, visible_time: int,
-                 popup_text: str, text_color: tuple, text_fonts: str, text_size: int, text_x: int, text_y: int) -> None:
+                 popup_text: str, text_color: tuple, text_fonts: str, text_size: int, text_x: int, text_y: int,
+                 lateral_display: bool, popup_x: int, popup_y: int, input_image: Union[str, None], input_scale: tuple,
+                 input_x: int, input_y: int) -> None:
         self.popup_rect: any = None
+        self.lateral_display: bool = lateral_display
+        self.popup_x: int = popup_x
+        self.popup_y: int = popup_y
         self.text_x: int = text_x
         self.text_y: int = text_y
         self.popup_text: str = popup_text
@@ -151,10 +156,18 @@ class PopupMessage:
         self.text_size: int = text_size
         self.text_fonts: str = text_fonts
         self.popup_height: int = popup_height
+        self.input_x: int = input_x
+        self.count: int = 0
+        self.input_y: int = input_y
+        self.enable_change: bool = True
         self.x: int = 0
         self.popup_width: int = popup_width
         self.img_path: str = img_path
         self.visible_time: int = visible_time
+        self.input_image: Union[str, None] = input_image
+        if isinstance(self.input_image, str):
+            self.input_image2: any = pygame.image.load(input_image)
+            self.input_image2: any = pygame.transform.scale(self.input_image2, input_scale)
         self.img_origin: any = pygame.image.load(self.img_path).convert_alpha()
         self.img_new: any = pygame.transform.scale(self.img_origin, (self.popup_width, self.popup_height))
         self.direction: int = 0
@@ -163,21 +176,61 @@ class PopupMessage:
 
     def draw(self) -> None:
         """绘制弹窗"""
-        if self.x != self.visible_time + 20 and self.visible is True:  # 在游戏中循环，每次往左移
-            self.x += 1
-            if self.x <= 10:  # 初始向左移动
-                self.direction: int = width - self.x * (self.popup_width // 10)
-                screen.blit(self.img_new, (self.direction, 0))
-                screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
-            elif 10 < self.x <= self.visible_time + 10:  # 中间静止状态
-                self.direction: int = width - self.popup_width
-                screen.blit(self.img_new, (self.direction, 0))
-                screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
-            else:  # 结束回缩状态
-                self.direction: int = (width - (self.visible_time + 20 - self.x) *
-                                       (self.popup_width // 10))
-                screen.blit(self.img_new, (self.direction, 0))
-                screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
+        if self.x != 20 and self.visible is True:  # 在游戏中循环，每次往左移
+            if self.enable_change:
+                self.x += 1
+            if self.x <= 10 and self.enable_change:  # 初始
+                if self.x == 10:
+                    self.enable_change: bool = False
+                    self.count: int = pygame.time.get_ticks()
+                if self.lateral_display:
+                    self.img_new.set_alpha(255 // 10 * self.x)
+                    direction = self.img_new.get_rect(center=(self.popup_x, self.popup_y))
+                    screen.blit(self.img_new, direction)
+                    if isinstance(self.input_image, str):
+                        self.input_image2.set_alpha(255 // 10 * self.x)
+                        screen.blit(self.input_image2, (direction[0] + self.input_x, direction[1] + self.input_y))
+                    self.txt_surface.set_alpha(255 // 10 * self.x)
+                    screen.blit(self.txt_surface, (direction[0] + self.text_x, direction[1] + self.text_y))
+                else:
+                    self.direction: int = width - self.x * (self.popup_width // 10)
+                    screen.blit(self.img_new, (self.direction, 0))
+                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
+                    if isinstance(self.input_image, str):
+                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y))
+            elif not self.enable_change:  # 中间状态
+                if pygame.time.get_ticks() - self.count >= self.visible_time:
+                    self.enable_change: bool = True
+                if self.lateral_display:
+                    direction = self.img_new.get_rect(center=(self.popup_x, self.popup_y))
+                    screen.blit(self.img_new, direction)
+                    screen.blit(self.txt_surface, (direction[0] + self.text_x, direction[1] + self.text_y))
+                    if isinstance(self.input_image, str):
+                        screen.blit(self.input_image2, (direction[0] + self.input_x, direction[1] + self.input_y))
+                    screen.blit(self.txt_surface, (direction[0] + self.text_x, direction[1] + self.text_y))
+                else:
+                    self.direction: int = width - self.popup_width
+                    screen.blit(self.img_new, (self.direction, 0))
+                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
+                    if isinstance(self.input_image, str):
+                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y))
+            else:  # 结束状态
+                if self.lateral_display:
+                    self.img_new.set_alpha(255 - 255 // 10 * (self.x - 10))
+                    direction = self.img_new.get_rect(center=(self.popup_x, self.popup_y))
+                    screen.blit(self.img_new, direction)
+                    if isinstance(self.input_image, str):
+                        self.input_image2.set_alpha(255 - 255 // 10 * (self.x - 10))
+                        screen.blit(self.input_image2, (direction[0] + self.input_x, direction[1] + self.input_y))
+                    self.txt_surface.set_alpha(255 - 255 // 10 * (self.x - 10))
+                    screen.blit(self.txt_surface, (direction[0] + self.text_x, direction[1] + self.text_y))
+                else:
+                    self.direction: int = (width - (20 - self.x) *
+                                           (self.popup_width // 10))
+                    screen.blit(self.img_new, (self.direction, 0))
+                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
+                    if isinstance(self.input_image, str):
+                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y))
             return
         else:
             self.visible: bool = False  # 其他情况隐藏弹窗
@@ -392,17 +445,18 @@ class Switch:
         else:
             active_can: bool = can_active
         if not self.is_level:
-            if self.rect.collidepoint(mouse_pos):
-                if pygame.mouse.get_pressed()[0]:  # 鼠标按下开关则切换状态
-                    if not self.clicked:
-                        if date == "04-01" or date == "05-13":
-                            soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
-                        else:
-                            soundtrack.music_play(0, "assets/sounds/Button.wav", False)
-                        self.clicked: bool = True
-                        self.activate: bool = not self.activate
-                else:
-                    self.clicked: bool = False
+            if can_active:
+                if self.rect.collidepoint(mouse_pos):
+                    if pygame.mouse.get_pressed()[0]:  # 鼠标按下开关则切换状态
+                        if not self.clicked:
+                            if date == "04-01" or date == "05-13":
+                                soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
+                            else:
+                                soundtrack.music_play(0, "assets/sounds/Button.wav", False)
+                            self.clicked: bool = True
+                            self.activate: bool = not self.activate
+                    else:
+                        self.clicked: bool = False
         else:
             if pygame.mouse.get_pressed()[0]:
                 if not self.clicked:
@@ -437,10 +491,10 @@ class Switch:
     def level_draw(self, level_id: int, level: int, account: int, can_active: bool) -> int:
         """当作为关卡时，绘制关卡信息"""
         if self.is_level and can_active:
-            with open(f"data/Level.json") as f:
+            with open(f"data/Level.json", encoding="UTF-8") as f:
                 json_str2: any = json.load(f)
                 f.close()
-            with open(f"data/User.json") as a:
+            with open(f"data/User.json", encoding="UTF-8") as a:
                 json_str: any = json.load(a)
                 a.close()
             if self.temp < 10:
@@ -888,10 +942,10 @@ class EntityCreate:
     """在关卡中生成实体"""
 
     def __init__(self, game_start_time: int, level: int, stage: int, difficult: int) -> None:
-        with open("data/Level_data.json") as f:
+        with open("data/Level_data.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
-        with open("data/Entity.json") as f:
+        with open("data/Entity.json", encoding="UTF-8") as f:
             json_str2: any = json.load(f)
             f.close()
         if width == 1280 and height == 720:
@@ -912,36 +966,79 @@ class EntityCreate:
         self.gun_damage: any = 0
         self.continue_count: int = 0
         self.basic_information: any = None
+        self.hit_last_hp: list = []
         self.hp: list = []
         self.location: list = []
         self.blit: list[bool] = []
         self.is_dead: list[bool] = []
+        self.last_hp: list = []
         self.dead_temp: list[int] = []
         self.dead_image: list = []
         self.dead_rect: list = []
         self.animation: list[int] = []
         self.invincible_time: list[int] = []
+        self.hp_animation: list = []
         self.can_hit: list[bool] = []
         self.blink: list[bool] = []
         self.path_count: list[int] = []
         self.last_can_hit: list[bool] = []
+        self.enable_change_animation: list[bool] = []
         self.can_change_walk_status: list[bool] = []
         self.last_can_change_walk_status: list[bool] = []
         self.walk_status_time: list[int] = []
         self.load_source: list = []
         self.load_tag: list[str] = []
+        self.effect: list[list] = []
+        self.pop: list = []
+        self.enable_pop: list = []
+        for y in range(json_str[f"{level}-{stage}"]["basic"]["popups"][self.difficult]):
+            self.pop.append(PopupMessage(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["width"] if
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["width"] !=
+                                         "width" else width,
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["height"] if
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["height"] !=
+                                         "height" else height,
+                                         image_usually_use[9] if json_str[f"{level}-{stage}"]
+                                         [f"entity{difficult}"][f"popups{y}"]["lateral_display"] else
+                                         image_usually_use[5], json_str[f"{level}-{stage}"][f"entity{difficult}"]
+                                         [f"popups{y}"]["time"], json_str[f"{level}-{stage}"][f"entity{difficult}"]
+                                         [f"popups{y}"]["text"], (255, 255, 255),
+                                         "assets/fonts/Text.TTF", json_str[f"{level}-{stage}"]
+                                         [f"entity{difficult}"][f"popups{y}"]["text_size"], json_str[f"{level}-{stage}"]
+                                         [f"entity{difficult}"][f"popups{y}"]["text_x"], json_str[f"{level}-{stage}"]
+                                         [f"entity{difficult}"][f"popups{y}"]["text_y"], json_str[f"{level}-{stage}"]
+                                         [f"entity{difficult}"][f"popups{y}"]["lateral_display"], width //
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["x2"] *
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["x1"],
+                                         height //
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["y2"] *
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["y1"],
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]
+                                         ["input_image"], (json_str[f"{level}-{stage}"][f"entity{difficult}"]
+                                         [f"popups{y}"]["input_width"],
+                                         json_str[f"{level}-{stage}"][f"entity{difficult}"]
+                                         [f"popups{y}"]["input_height"]), json_str[f"{level}-{stage}"]
+                                         [f"entity{difficult}"][f"popups{y}"]["input_x"], json_str[f"{level}-{stage}"]
+                                         [f"entity{difficult}"][f"popups{y}"]["input_y"]))
+            if self.pop[y].lateral_display:
+                self.pop[y].img_path = image_usually_use[9]
+            self.enable_pop.append(False)
         for x in range(json_str[f"{level}-{stage}"]["basic"]["enemy"][difficult]):
             (self.location.append([Decimal(str(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"{x}"]["pos"][0])) *
                                    Decimal(str(self.multiple_width)),
-                                   Decimal(str(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"{x}"]["pos"][1])) *
-                                   Decimal(str(self.multiple_height))]))
+                                   Decimal(str(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"{x}"]["pos"][1]))]))
+            self.effect.append([])
+            self.enable_change_animation.append(False)
             self.blit.append(False)
             self.is_dead.append(False)
             self.dead_temp.append(0)
+            self.hp_animation.append(0)
             self.dead_image.append("")
             self.dead_rect.append("")
             self.animation.append(1)
             self.hp.append(json_str2[json_str[f"{level}-{stage}"][f"entity{difficult}"][f"{x}"]["id"]]["HP"])
+            self.hit_last_hp.append(self.hp[x])
+            self.last_hp.append(self.hp[x])
             self.invincible_time.append(0)
             self.can_hit.append(True)
             self.blink.append(False)
@@ -954,6 +1051,7 @@ class EntityCreate:
         self.game_now_time: int = 0
         self.stage: int = stage
         self.progress: int = 0
+        self.pop_progress: int = 0
         self.last_can_active: bool = True
         self.start_frozen_time: int = 0
         self.total_frozen_time: int = 0
@@ -966,7 +1064,7 @@ class EntityCreate:
     def check(self, can_active: bool) -> None:
         """检查是否可以生成实体"""
         self.game_now_time: int = pygame.time.get_ticks()
-        with open("data/Level_data.json") as f:
+        with open("data/Level_data.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
         pygame.draw.line(screen, (255, 52, 40), (0, self.danger_line_y), (width, self.danger_line_y), 5)
@@ -979,6 +1077,13 @@ class EntityCreate:
                         ["visible_time/ms"]):
                     self.blit[self.progress] = True
                     self.progress += 1
+            if not self.pop_progress == json_str[f"{self.level}-{self.stage}"]["basic"]["popups"][self.difficult]:
+                if (self.game_now_time - self.game_start_time - self.total_frozen_time >=
+                        json_str[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"popups{self.pop_progress}"]
+                        ["visible_time/ms"]):
+                    self.pop[self.pop_progress].activate()
+                    self.enable_pop[self.pop_progress] = True
+                    self.pop_progress += 1
         else:
             if self.last_can_active != can_active:  # 开始计算暂停时间
                 self.start_frozen_time: int = pygame.time.get_ticks()
@@ -992,20 +1097,44 @@ class EntityCreate:
         self.basic_information: list = basic_information
         self.gun_damage: any = gun_damage
         self.approve_damage_text: bool = False
-        with open("data/Entity.json") as f:
+        temp_hurt_damage: int = 0
+        temp_speed: Decimal = Decimal(str(0))
+        temp_def: Decimal = Decimal(str(0))
+        with open("data/Entity.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
-        with open("data/Level_data.json") as f:
+        with open("data/Level_data.json", encoding="UTF-8") as f:
             json_str2: any = json.load(f)
             f.close()
-        with open("data/Path.json") as f:
+        with open("data/Path.json", encoding="UTF-8") as f:
             json_str3: any = json.load(f)
             f.close()
-        with open("data/Build.json") as f:
+        with open("data/Build.json", encoding="UTF-8") as f:
             json_str4: any = json.load(f)
+            f.close()
+        with open("data/Effect.json", encoding="UTF-8") as f:
+            json_str5: any = json.load(f)
             f.close()
         for x in range(json_str2[f"{self.level}-{self.stage}"]["basic"]["enemy"][self.difficult]):  # 对每个敌人进行操作
             if self.blit[x]:  # 如果允许输出就开始操作
+                if can_active:
+                    temp_hurt_damage: int = 0
+                    temp_speed: Decimal = Decimal(str(0))
+                    temp_def: Decimal = Decimal(str(0))
+                    for y in range(len(self.effect[x])):
+                        if 0 in json_str5[f"{self.effect[x][y]}"]["give"]:
+                            temp_hurt_damage += json_str5[f"{self.effect[x][y]}"]["give_numerical"][
+                                json_str5[f"{self.effect[x][y]}"]["give"].index(0)]
+                        if 1 in json_str5[f"{self.effect[x][y]}"]["give"]:
+                            temp_def: Decimal = temp_def + Decimal(str(json_str5[f"{self.effect[x][y]}"]
+                                                                       ["give_numerical"][
+                                                                           json_str5[f"{self.effect[x][y]}"][
+                                                                               "give"].index(1)]))
+                        if 2 in json_str5[f"{self.effect[x][y]}"]["give"]:
+                            temp_speed: Decimal = temp_speed + Decimal(str(json_str5[f"{self.effect[x][y]}"]
+                                                                           ["give_numerical"][
+                                                                               json_str5[f"{self.effect[x][y]}"][
+                                                                                   "give"].index(2)]))
                 if (f"assets/images/{json_str2[f"{self.level}-{self.stage}"]
                                               [f"entity{self.difficult}"][f"{x}"]["id"]}{
                     self.animation[x]}{
@@ -1034,44 +1163,105 @@ class EntityCreate:
                         self.animation[x]}{
                         json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
                                 ["Image_type"]}")
-                if can_active:
+                if (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is None and
+                    True in json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["custom_path"]
+                        ["Status"][self.path_count[x]]["direction"]):
+                    self.enable_change_animation[x] = True
+                elif (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is not None and
+                      True in json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                      ["path"]]["Status"][self.path_count[x]]["direction"]):
+                    self.enable_change_animation[x] = True
+                else:
+                    self.enable_change_animation[x] = False
+                if can_active and self.enable_change_animation[x]:
                     if (self.animation[x] >= json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
                                                                [f"{x}"]["id"]]["Animation_count"]):  # 切换图片以实现动画
                         self.animation[x] = 1
                     else:
                         self.animation[x] += 1
                 if can_active:  # 移动
-                    if json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
-                                                   ["path"]]["Status"][self.path_count[x]]["direction"][0]:
+                    if (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is not None
+                            and json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                                                   ["path"]]["Status"][self.path_count[x]]["direction"][0]):
                         self.location[x][1] = (Decimal(str(self.location[x][1])) +
                                                Decimal(
-                                                   str(json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                   str((json_str[json_str2[f"{self.level}-{self.stage}"]
                                                                          [f"entity{self.difficult}"][f"{x}"]
-                                                                         ["id"]]["Speed"] * self.multiple_height)))
-                    if json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
-                                                   ["path"]]["Status"][self.path_count[x]]["direction"][1]:
+                                                                         ["id"]]["Speed"] +
+                                                        temp_speed) * Decimal(str(self.multiple_height)))))
+                    elif (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is None and
+                          json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["custom_path"]
+                                 ["Status"][self.path_count[x]]["direction"][0]):
+                        self.location[x][1] = (Decimal(str(self.location[x][1])) +
+                                               Decimal(
+                                                   str((json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                         [f"entity{self.difficult}"][f"{x}"]
+                                                                         ["id"]]["Speed"] +
+                                                        temp_speed) * Decimal(str(self.multiple_height)))))
+                    if (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is not None
+                            and json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                                                   ["path"]]["Status"][self.path_count[x]]["direction"][1]):
                         self.location[x][0] = (Decimal(str(self.location[x][0])) -
                                                Decimal(
-                                                   str(json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                   str((json_str[json_str2[f"{self.level}-{self.stage}"]
                                                                          [f"entity{self.difficult}"][f"{x}"]
-                                                                         ["id"]]["Speed"] * self.multiple_width)))
-                    if json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
-                                                   ["path"]]["Status"][self.path_count[x]]["direction"][2]:
+                                                                         ["id"]]["Speed"] +
+                                                        temp_speed) * Decimal(str(self.multiple_width)))))
+                    elif (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is None and
+                          json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["custom_path"]
+                                 ["Status"][self.path_count[x]]["direction"][1]):
+                        self.location[x][0] = (Decimal(str(self.location[x][0])) -
+                                               Decimal(
+                                                   str((json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                         [f"entity{self.difficult}"][f"{x}"]
+                                                                         ["id"]]["Speed"] +
+                                                        temp_speed) * Decimal(str(self.multiple_width)))))
+                    if (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is not None
+                            and json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                                                   ["path"]]["Status"][self.path_count[x]]["direction"][2]):
                         self.location[x][0] = (Decimal(str(self.location[x][0])) +
                                                Decimal(
-                                                   str(json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                   str((json_str[json_str2[f"{self.level}-{self.stage}"]
                                                                          [f"entity{self.difficult}"][f"{x}"]
-                                                                         ["id"]]["Speed"] * self.multiple_width)))
-                    if json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
-                                                   ["path"]]["Status"][self.path_count[x]]["direction"][3]:
+                                                                         ["id"]]["Speed"] +
+                                                        temp_speed) * Decimal(str(self.multiple_width)))))
+                    elif (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is None and
+                          json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["custom_path"]
+                                 ["Status"][self.path_count[x]]["direction"][2]):
+                        self.location[x][0] = (Decimal(str(self.location[x][0])) +
+                                               Decimal(
+                                                   str((json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                         [f"entity{self.difficult}"][f"{x}"]
+                                                                         ["id"]]["Speed"] +
+                                                        temp_speed) * Decimal(str(self.multiple_width)))))
+                    if (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is not None
+                            and json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                                                   ["path"]]["Status"][self.path_count[x]]["direction"][3]):
                         self.location[x][1] = (Decimal(str(self.location[x][1])) -
                                                Decimal(
-                                                   str(json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                   str((json_str[json_str2[f"{self.level}-{self.stage}"]
                                                                          [f"entity{self.difficult}"][f"{x}"]
-                                                                         ["id"]]["Speed"] * self.multiple_height)))
+                                                                         ["id"]]["Speed"] +
+                                                        temp_speed) * Decimal(str(self.multiple_height)))))
+                    elif (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is None and
+                          json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["custom_path"]
+                                 ["Status"][self.path_count[x]]["direction"][3]):
+                        self.location[x][1] = (Decimal(str(self.location[x][1])) -
+                                               Decimal(
+                                                   str((json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                         [f"entity{self.difficult}"][f"{x}"]
+                                                                         ["id"]]["Speed"] +
+                                                        temp_speed) * Decimal(str(self.multiple_height)))))
                     if self.can_change_walk_status[x]:
-                        if json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
-                                                   ["path"]]["Status_count"] == self.path_count[x] + 1:
+                        if (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is not
+                                None and json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
+                                                            [f"{x}"]["path"]]["Status_count"]
+                                == self.path_count[x] + 1):
+                            self.path_count[x] = 0
+                        elif (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is None
+                              and json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                              ["custom_path"]["Status_count"]
+                                == self.path_count[x] + 1):
                             self.path_count[x] = 0
                         else:
                             self.path_count[x] += 1
@@ -1081,10 +1271,17 @@ class EntityCreate:
                         if self.last_can_change_walk_status[x] != self.can_change_walk_status[x]:
                             self.walk_status_time[x] = (pygame.time.get_ticks() - self.game_start_time
                                                              - self.total_frozen_time)
-                        if (pygame.time.get_ticks() - self.total_frozen_time -
+                        if (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is not
+                                None and pygame.time.get_ticks() - self.total_frozen_time -
                                 self.game_start_time - self.walk_status_time[x] >=
                                 json_str3[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
                                                    ["path"]]["Status"][self.path_count[x]]["time/ms"]):
+                            self.can_change_walk_status[x] = True
+                        elif (json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["path"] is None
+                                and pygame.time.get_ticks() - self.total_frozen_time -
+                                self.game_start_time - self.walk_status_time[x] >=
+                              json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["custom_path"]
+                              ["Status"][self.path_count[x]]["time/ms"]):
                             self.can_change_walk_status[x] = True
                         self.last_can_change_walk_status[x] = self.can_change_walk_status[x]
                 entity_rect = pygame.Rect(
@@ -1094,14 +1291,56 @@ class EntityCreate:
                     json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]["scale"]
                     [1])
                 entity_rect.center = (self.location[x][0], self.location[x][1])  # 计算位置
+                if can_active:  # 给予和显示状态
+                    effect_len: int = 0
+                    for y in range(len(self.effect[x])):
+                        if (f"assets/images/{json_str5[f"{self.effect[x][y]}"]["name"]}{
+                                json_str5[f"{self.effect[x][y]}"]["Image_type"]}" in self.load_tag):
+                            effect_image: any = self.load_source[self.load_tag.index(f"assets/images/{
+                                json_str5[f"{self.effect[x][y]}"]["name"]}{
+                                json_str5[f"{self.effect[x][y]}"]["Image_type"]}")]
+                        else:
+                            effect_image: any = pygame.image.load(f"assets/images/{json_str5[f"{
+                                self.effect[x][y]}"]["name"]}{
+                                json_str5[f"{self.effect[x][y]}"]["Image_type"]}")  # 控制加载图片
+                            effect_image: any = pygame.transform.scale(effect_image, (25, 40))  # 修改图片尺寸
+                            self.load_source.append(effect_image)
+                            self.load_tag.append(f"assets/images/{json_str5[f"{self.effect[x][y]}"]["name"]}{
+                                json_str5[f"{self.effect[x][y]}"]["Image_type"]}")
+                        effect_rect = pygame.Rect(entity_rect.center[0], entity_rect.top - 55, 25, 40)
+                        effect_rect.right = entity_rect.center[0] + (30 * len(self.effect[x]) / 2) - effect_len
+                        screen.blit(effect_image, effect_rect)
+                        effect_len += 30
+                    if json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                                                     ["id"]]["Enemy_type"] >= 1:
+                        for y in range(len(json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
+                                                             [f"{x}"]["id"]]["cause_effects"])):
+                            if (json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                                                  ["id"]]["cause_reason"][y] == "global"):
+                                for z in range(json_str2[f"{self.level}-{self.stage}"]["basic"]["enemy"]
+                                               [self.difficult]):
+                                    if self.blit[z]:
+                                        if (json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
+                                                              [f"{z}"]["id"]]["Enemy_type"] in
+                                                json_str5[f"{json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                               [f"entity{self.difficult}"][f"{x}"]
+                                                                               ["id"]]["cause_effects"][y]}"]
+                                                                               ["enemy_type"]):
+                                            if (json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                 [f"entity{self.difficult}"][f"{x}"]["id"]]
+                                                                 ["cause_effects"][y] not in self.effect[z]):
+                                                self.effect[z].append(json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                                        [f"entity{self.difficult}"]
+                                                                                        [f"{x}"]["id"]]["cause_effects"]
+                                                                      [y])
                 if self.blink[x]:
                     entity_image.set_alpha(100)
                 else:
                     entity_image.set_alpha(255)  # 无敌时间闪烁
                 screen.blit(entity_image, entity_rect)
                 if entity_rect.bottom >= self.danger_line_y:
-                    basic_information[0] -= json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
-                                                              [f"{x}"]["id"]]["minus_HP"]
+                    basic_information[0] -= (json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
+                                                              [f"{x}"]["id"]]["minus_HP"] + temp_hurt_damage)
                     basic_information[1] += 1
                     if date == "04-01" or date == "05-13":
                         soundtrack.music_play(0, "assets/sounds/Shilang_haha.wav", False)
@@ -1118,15 +1357,26 @@ class EntityCreate:
                                         soundtrack.music_play(0, "assets/sounds/Shilang_Boom_Uh.wav", False)
                                     else:
                                         soundtrack.music_play(0, "assets/sounds/Boom.wav", False)
-                                    self.hp[x] = (Decimal(str(self.hp[x])) -
-                                                           Decimal(str(json_str4[f"{build_id[y]}"]["damage"])))
+                                    if json_str4[f"{build_id[y]}"]["damage_type"]:
+                                        self.hp[x] = (Decimal(str(self.hp[x])) -
+                                                               Decimal(str(json_str4[f"{build_id[y]}"]["damage"])))
+                                    else:
+                                        damage: any = (Decimal(str(json_str4[f"{build_id[y]}"]["damage"])) -
+                                                       Decimal(str(json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                                     [f"entity{self.difficult}"]
+                                                                                     [f"{x}"]["id"]]["Def"])) - temp_def
+                                                       )
+                                        if damage <= 0:
+                                            damage: any = 0
+                                        self.hp[x] = (Decimal(str(self.hp[x])) -
+                                                      Decimal(str(damage)))
                                     self.hp[x] = float(self.hp[x])
                                     build_active[y] = False
                     if entity_rect.colliderect(gun_rect) and gun_is_shoot and self.can_hit[x]:  # 中枪受伤逻辑
                         self.gun_damage: any = (Decimal(str(gun_damage)) -
                                                 Decimal(str(json_str[json_str2[f"{self.level}-{self.stage}"]
                                                                               [f"entity{self.difficult}"]
-                                                                              [f"{x}"]["id"]]["Def"])))
+                                                                              [f"{x}"]["id"]]["Def"])) - temp_def)
                         if self.gun_damage < 0:
                             self.gun_damage: any = 0
                         self.hp[x] = Decimal(str(self.hp[x])) - Decimal(str(self.gun_damage))
@@ -1152,6 +1402,35 @@ class EntityCreate:
                         self.is_dead[x] = True
                         self.dead_image[x] = entity_image
                         self.dead_rect[x] = entity_rect
+                        if json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                                             ["id"]]["Enemy_type"] >= 1:
+                            for y in range(
+                                    len(json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
+                                                          [f"{x}"]["id"]]["cause_effects"])):
+                                if (json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
+                                                      ["id"]]["cause_reason"][y] == "global"):
+                                    for z in range(json_str2[f"{self.level}-{self.stage}"]["basic"]["enemy"]
+                                                   [self.difficult]):
+                                        if self.blit[z]:
+                                            if (json_str[
+                                                json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"]
+                                                [f"{z}"]["id"]]["Enemy_type"] in
+                                                    json_str5[f"{json_str[json_str2[f"{self.level}-{self.stage}"][
+                                                        f"entity{self.difficult}"
+                                                    ][f"{x}"]["id"]]["cause_effects"][y]}"]
+                                                    ["enemy_type"]):
+                                                if (json_str[json_str2[f"{self.level}-{self.stage}"]
+                                                                      [f"entity{self.difficult}"][f"{x}"]["id"]]
+                                                                      ["cause_effects"][y] in self.effect[z]):
+                                                    del self.effect[z][self.effect[z].index(json_str[
+                                                                                                json_str2
+                                                                                                [f"{self.level}-"
+                                                                                                    f"{self.stage}"]
+                                                                                                [
+                                                                                                    f"entity"
+                                                                                                    f"{self.difficult}"]
+                                                                                                [f"{x}"]["id"]]
+                                                                                            ["cause_effects"][y])]
                         continue
                     if not self.can_hit[x]:  # 无敌时间闪烁效果
                         self.blink[x] = not self.blink[x]
@@ -1163,8 +1442,29 @@ class EntityCreate:
                         self.blink[x] = False
                     self.last_can_hit[x] = self.can_hit[x]
                 hp_len: int = (entity_rect.right - 5) - (entity_rect.left + 5)
+                if self.last_hp[x] != self.hp[x]:
+                    self.hit_last_hp[x] = self.last_hp[x]
+                    self.hp_animation[x] = float(Decimal(str(max(self.last_hp[x], self.hp[x]))) -
+                                                 Decimal(str(min(self.last_hp[x], self.hp[x]))))
                 pygame.draw.line(screen, (0, 0, 0), (entity_rect.left, entity_rect.top - 10),  # 血条加载
                                  (entity_rect.right, entity_rect.top - 10), 12)
+                if self.hp_animation[x] > 0:
+                    pygame.draw.line(screen, (91, 0, 0), (entity_rect.left + 5 + hp_len * (
+                            (self.hit_last_hp[x] - (float(Decimal(str(max(self.hit_last_hp[x], self.hp[x]))) -
+                                                    Decimal(str(min(self.hit_last_hp[x], self.hp[x]))))
+                                                    - self.hp_animation[x])) / json_str[json_str2[
+                                                                                            f"{self.level}-{self.stage}"
+                                                                                           ]
+                                                                                           [f"entity{self.difficult}"]
+                                                                                           [f"{x}"]["id"]]["HP"]),
+                                                          entity_rect.top - 10),
+                                     (entity_rect.left + 5 + hp_len * (self.hp[x] /
+                                                                       json_str[
+                                         json_str2[
+                                            f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]["id"]]
+                                        ["HP"]),
+                                      entity_rect.top - 10), 8)
+                    self.hp_animation[x] -= 1
                 if self.hp[x] / json_str[json_str2[f"{self.level}-{self.stage}"][f"entity{self.difficult}"][f"{x}"]
                                                   ["id"]]["HP"] > 0.8:  # 根据剩余血量占比更改血条颜色
                     pygame.draw.line(screen, (94, 203, 118), (entity_rect.left + 5, entity_rect.top - 10),
@@ -1184,16 +1484,20 @@ class EntityCreate:
                                       entity_rect.top - 10), 8)
             elif self.dead_temp[x] != 40 and self.is_dead[x] and can_active:
                 self.dead(x)
+            self.last_hp[x] = self.hp[x]
+        for y in range(json_str2[f"{self.level}-{self.stage}"]["basic"]["popups"][self.difficult]):
+            if self.enable_pop[y]:
+                self.pop[y].draw()
 
     def dead(self, index: int) -> None:
         """播放死亡动画"""
         self.dead_temp[index] += 1
         if self.dead_temp[index] <= 10:
-            image: any = pygame.transform.rotate(self.dead_image[index], -9 * self.dead_temp[index])
+            images: any = pygame.transform.rotate(self.dead_image[index], -9 * self.dead_temp[index])
         else:
-            image: any = pygame.transform.rotate(self.dead_image[index], -90)
-            image.set_alpha(255 - 255 // 30 * (self.dead_temp[index] - 10))
-        screen.blit(image, self.dead_rect[index])
+            images: any = pygame.transform.rotate(self.dead_image[index], -90)
+            images.set_alpha(255 - 255 // 30 * (self.dead_temp[index] - 10))
+        screen.blit(images, self.dead_rect[index])
         if self.dead_temp[index] == 40:
             self.basic_information[1] += 1
 
@@ -1218,7 +1522,6 @@ class DamageText:
         """绘制文本"""
         continue_count: int = 0
         for y in range(len(self.text_surface)):
-            print(self.text_surface)
             x: int = y - continue_count
             if self.temp[x] != 30:
                 self.temp[x] += 1
@@ -1252,13 +1555,13 @@ class GameGun:
         self.game_start_time: int = game_start_time
         self.indicator: str = ""
         self.account: int = account
+        self.damage_multiple: any = None
         self.accumulation_now_time: int = 0
         self.cool_time: int = 0
         self.change_gun_action: bool = False
         self.cool_now_time: int = 0
         self.gun_type: int = gun_type
         self.reload: bool = False
-        self.reload_action: bool = False
         self.basic_information: list = basic_information
         self.shoot: list = shoot
         self.surplus_bullets: int = 0
@@ -1274,32 +1577,30 @@ class GameGun:
         self.damage: int = 1
         self.deploy_equipment: bool = False
         self.gun_rect = (0, 0, 0, 0)
-        with open(f"data/User.json") as f:
+        with open(f"data/User.json", encoding="UTF-8") as f:
             self.json_str: any = json.load(f)
             f.close()
-        with open(f"data/Gun.json") as f:
+        with open(f"data/Gun.json", encoding="UTF-8") as f:
             self.json_str2: any = json.load(f)
             f.close()
-        with open(f"data/Build.json") as f:
+        with open(f"data/Build.json", encoding="UTF-8") as f:
             self.json_str3: any = json.load(f)
             f.close()
-        self.surplus_bullets: int = (self.json_str2[f"{self.gun_type}"]["initial_bullet_cap"] +
-                                     self.json_str["gun_level"][self.account][self.gun_type] *
-                                     self.json_str2[f"{self.gun_type}"]["each_update_bullet_cap"])
+        self.surplus_bullets: int = 0
         if date == "04-01" or date == "05-13":
             self.audio1: any = pygame.mixer.Sound("assets/sounds/Shilang_haha.wav")
         else:
             self.audio1: any = pygame.mixer.Sound("assets/sounds/Accumulation.wav")
         self.audio1.set_volume(volume)
 
-    def draw(self, can_active: bool) -> None:
+    def draw(self, can_active: bool, deploy_numbers: int, deployment_ceiling: int) -> None:
         """绘制枪械"""
         self.indicator: str = "indicator_normal.png"
         mouse_pos: tuple = pygame.mouse.get_pos()
         if self.reload:
             self.indicator: str = "indicator_reload.png"
         if can_active:
-            self.update(can_active)
+            self.update(can_active, deploy_numbers, deployment_ceiling)
             if self.shoot[0]:  # 根据是否开枪加载图片
                 background_image: any = (
                     pygame.image.load(f"assets/images/gun{self.gun_type}_active.png").convert_alpha())
@@ -1338,6 +1639,20 @@ class GameGun:
             if self.json_str["equipment_level"][self.account][self.build_id] != -1:
                 equipment_image: any = pygame.image.load(f"assets/images/{self.json_str3[f"{self.build_id}"]["name"]}"
                                                          f"{self.json_str3[f"{self.build_id}"]["Image_type"]}")
+                cost_text: any = (pygame.font.Font('assets/fonts/Text.TTF', 32).render
+                                  (f"费用:{self.basic_information[3]}/{self.json_str3[f"{self.build_id}"]["cost"]}",
+                                   True, (255, 255, 255)))
+                cost_text_rect = cost_text.get_rect(center=(mouse_pos[0], mouse_pos[1] + 20),
+                                                    right=mouse_pos[0] - self.json_str2[f"{self.gun_type}"]
+                                                    ["scale"] // 2)
+                screen.blit(cost_text, cost_text_rect)
+                deploy_text: any = (pygame.font.Font('assets/fonts/Text.TTF', 32).render
+                                    (f"部署:{deploy_numbers}/{deployment_ceiling}",
+                                     True, (255, 255, 255)))
+                deploy_text_rect = deploy_text.get_rect(center=(mouse_pos[0], mouse_pos[1] + 45),
+                                                        right=mouse_pos[0] - self.json_str2[f"{self.gun_type}"]
+                                                                                           ["scale"] // 2)
+                screen.blit(deploy_text, deploy_text_rect)
             else:
                 equipment_image: any = pygame.image.load("assets/images/Ban.png")
             equipment_image: any = pygame.transform.scale(equipment_image, (60, 60))
@@ -1346,16 +1661,13 @@ class GameGun:
                                                                        self.json_str2[f"{self.gun_type}"]
                                                                                      ["scale"] // 2),
             screen.blit(equipment_image, equipment_image_rect)
-            cost_text: any = (pygame.font.Font('assets/fonts/Text.TTF', 32).render
-                                 (f"{self.basic_information[3]}/{self.json_str3[f"{self.build_id}"]["cost"]}",
-                                  True, (255, 255, 255)))
-            cost_text_rect = cost_text.get_rect(center=(mouse_pos[0], mouse_pos[1] + 20),
-                                                      right=mouse_pos[0] - self.json_str2[f"{self.gun_type}"]
-                                                                                         ["scale"] // 2)
-            screen.blit(cost_text, cost_text_rect)
 
-    def update(self, can_active: bool) -> None:
+    def update(self, can_active: bool, deploy_numbers: int, deployment_ceiling: int) -> None:
         """检测是否开枪"""
+        if not self.shoot[0]:
+            self.damage: int = 1
+        else:
+            self.damage: Decimal = Decimal(str(self.damage_multiple))
         self.approve_equipments: bool = False
         if can_active:
             self.mp_recover_now_time: int = (pygame.time.get_ticks() - self.game_start_time - self.total_frozen_time -
@@ -1368,44 +1680,37 @@ class GameGun:
             self.basic_information[3] = self.mp
             if self.last_active != can_active:
                 self.total_frozen_time += self.temp_frozen_time  # 更新暂停时间
-            if pygame.key.get_pressed()[pygame.K_w] or pygame.key.get_pressed()[pygame.K_q]:
-                if not self.change_equipment:
-                    if date == "04-01" or date == "05-13":
-                        soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
-                    else:
-                        soundtrack.music_play(0, "assets/sounds/change_gun.wav", False)
-                    if pygame.key.get_pressed()[pygame.K_w]:
-                        if self.build_id + 1 != len(self.json_str3):
-                            self.build_id += 1
+            for events in pygame.event.get():
+                if events.type == MOUSEBUTTONDOWN and not self.reload:
+                    if events.button == 4 or events.button == 5:
+                        if date == "04-01" or date == "05-13":
+                            soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
                         else:
-                            self.build_id: int = 0
-                    else:
-                        if self.build_id != 0:
-                            self.build_id -= 1
+                            soundtrack.music_play(0, "assets/sounds/change_gun.wav", False)
+                        if events.button == 5:
+                            if self.build_id + 1 != len(self.json_str3):
+                                self.build_id += 1
+                            else:
+                                self.build_id: int = 0
+                        elif events.button == 4:
+                            if self.build_id != 0:
+                                self.build_id -= 1
+                            else:
+                                self.build_id: int = len(self.json_str3) - 1
+                if events.type == MOUSEBUTTONDOWN:  # 切枪
+                    if events.button == 2:
+                        if date == "04-01" or date == "05-13":
+                            soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
                         else:
-                            self.build_id: int = len(self.json_str3) - 1
-                    self.change_equipment: bool = True
-            elif (not pygame.key.get_pressed()[pygame.K_w] and not pygame.key.get_pressed()[pygame.K_q] and
-                  self.change_equipment):
-                self.change_equipment: bool = False
-            if pygame.key.get_pressed()[pygame.K_e] and not self.change_gun_action:  # 切枪
-                if date == "04-01" or date == "05-13":
-                    soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
-                else:
-                    soundtrack.music_play(0, "assets/sounds/change_gun.wav", False)
-                self.change_gun_action: bool = True
-                if self.reload and self.surplus_bullets > 0:
-                    self.reload: bool = False
-            elif not pygame.key.get_pressed()[pygame.K_e] and self.change_gun_action:
-                self.change_gun_action: bool = False
-            for x in pygame.event.get():
-                if x.type == pygame.MOUSEWHEEL and self.reload and self.reload_action:  # 补充子弹
+                            soundtrack.music_play(0, "assets/sounds/change_gun.wav", False)
+                        if self.reload and self.surplus_bullets > 0:
+                            self.reload: bool = False
+                if events.type == pygame.MOUSEWHEEL and self.reload:  # 补充子弹
                     if isinstance(self.bullets, int) and self.bullets > 0:
                         if date == "04-01" or date == "05-13":
                             soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
                         else:
                             soundtrack.music_play(0, "assets/sounds/reload.wav", False)
-                        self.reload_action: bool = False
                         self.surplus_bullets += 1
                         if isinstance(self.bullets, int):  # 根据是否是无限子弹区分不同处理方法
                             self.bullets -= 1
@@ -1418,14 +1723,11 @@ class GameGun:
                             soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
                         else:
                             soundtrack.music_play(0, "assets/sounds/reload.wav", False)
-                        self.reload_action: bool = False
                         self.surplus_bullets += 1
                         if (self.surplus_bullets == self.json_str2[f"{self.gun_type}"]["initial_bullet_cap"] +
                                 self.json_str["gun_level"][self.account][self.gun_type] *
                                 self.json_str2[f"{self.gun_type}"]["each_update_bullet_cap"]):
                             self.reload: bool = False
-                elif x.type != pygame.MOUSEWHEEL and self.reload and not self.reload_action:
-                    self.reload_action: bool = True
             if (pygame.mouse.get_pressed()[0] and not self.shoot[0] and self.can_action and self.surplus_bullets > 0 and
                     not self.reload):  # 开枪
                 self.can_action: bool = False
@@ -1461,6 +1763,8 @@ class GameGun:
                 else:
                     self.damage: Decimal = Decimal(str(pygame.time.get_ticks() - self.accumulation_now_time -
                                                        self.total_frozen_time - self.game_start_time)) / Decimal("100")
+                    if self.damage < 1:
+                        self.damage: int = 1
                 self.now_time: int = pygame.time.get_ticks() - self.game_start_time - self.total_frozen_time
                 self.can_action: bool = False
                 self.cool_now_time: int = (pygame.time.get_ticks() - self.total_frozen_time - self.game_start_time
@@ -1468,10 +1772,10 @@ class GameGun:
                 self.shoot[0] = True
                 self.action: bool = True
                 self.is_accumulation: bool = False
+            if self.surplus_bullets == 0 and not self.shoot[0] and not self.is_accumulation:
+                self.reload: bool = True
             if not self.shoot[0] and not self.can_action and not self.is_accumulation:  # 冷却时间
                 self.indicator: str = "indicator_cold_time.png"
-                if self.surplus_bullets == 0:
-                    self.reload: bool = True
                 self.cool_time: int = pygame.time.get_ticks() - self.total_frozen_time - self.game_start_time
                 if self.cool_time - self.cool_now_time >= self.json_str2[f"{self.gun_type}"]["cool_time/ms"]:
                     self.can_action: bool = True
@@ -1480,7 +1784,7 @@ class GameGun:
                 if timer - self.now_time >= self.json_str2[f"{self.gun_type}"]["time/ms"]:
                     self.shoot[0] = False
                     self.damage: float = 1
-            if pygame.mouse.get_pressed()[2] and not self.deploy_equipment:
+            if pygame.mouse.get_pressed()[2] and not self.deploy_equipment and deploy_numbers < deployment_ceiling:
                 self.deploy_equipment: bool = True
                 if (self.mp >= self.json_str3[f"{self.build_id}"]["cost"] and
                         self.json_str["equipment_level"][self.account][self.build_id] != -1):
@@ -1492,9 +1796,10 @@ class GameGun:
                         Music.music_play(0, f"assets/sounds/deploy_equipment.wav", False)
             elif not pygame.mouse.get_pressed()[2] and self.deploy_equipment:
                 self.deploy_equipment: bool = False
-            self.damage: Decimal = (Decimal(str(self.damage)) *
-                                    Decimal(str(self.json_str2[f"{self.gun_type}"]["basic_damage"])))
-            return
+            if self.shoot[0]:
+                self.damage_multiple: Decimal = Decimal(str(self.damage))
+                self.damage: Decimal = (Decimal(str(self.damage)) *
+                                        Decimal(str(self.json_str2[f"{self.gun_type}"]["basic_damage"])))
         else:
             if self.last_active != can_active:  # 控制暂停
                 self.temp_frozen_time: int = 0
@@ -1514,7 +1819,7 @@ class Equipments:
 
     def build_append(self, build_id: int) -> None:
         """新增设备"""
-        with open("data/Build.json") as f:
+        with open("data/Build.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
         equipment_image: any = pygame.image.load(f"assets/images/{json_str[f"{build_id}"]["name"]}"
@@ -1528,16 +1833,82 @@ class Equipments:
 
     def draw(self) -> None:
         """绘制设备"""
-        for x in range(len(self.build_id)):
+        continue_count: int = 0
+        for y in range(len(self.build_id)):
+            x: int = y - continue_count
             if self.active[x]:
                 screen.blit(self.build_surface[x], self.build_rect[x])
+            else:
+                continue_count += 1
+                del self.build_id[x]
+                del self.build_rect[x]
+                del self.build_surface[x]
+                del self.active[x]
+
+
+class ScrollBackground:
+    """可滚动的背景"""
+
+    def __init__(self, img_path: str, screen_width: int, screen_height: int, alpha: int
+                 ) -> None:
+        self.screen_width: int = screen_width
+        self.screen_height: int = screen_height
+        self.scroll_x: int = 0
+        self.scroll_y: int = 0
+        self.press_shift: bool = False
+        self.horizontal_scroll: bool = False
+        img: any = pygame.image.load(img_path)
+        self.new_img: any = pygame.transform.scale(img, (screen_width, screen_height))
+        self.new_img.set_alpha(alpha)
+
+    def draw(self, scroll_speed: int) -> None:
+        """绘制背景"""
+        for events in pygame.event.get():
+            # 检测 Shift 键是否按下
+            if pygame.key.get_pressed()[K_LSHIFT] or pygame.key.get_pressed()[K_RSHIFT]:
+                if not self.press_shift:
+                    self.press_shift: bool = True
+                    self.horizontal_scroll: bool = not self.horizontal_scroll
+            else:
+                self.press_shift: bool = False
+            if events.type == MOUSEBUTTONDOWN:
+                temp_horizontal_scroll: bool = self.horizontal_scroll
+                if events.button == 4:
+                    for x in range(scroll_speed):
+                        if temp_horizontal_scroll and self.scroll_x > 0:
+                            self.scroll_x -= 1
+                        elif not temp_horizontal_scroll and self.scroll_y > 0:
+                            self.scroll_y -= 1
+                elif events.button == 5:
+                    for x in range(scroll_speed):
+                        if temp_horizontal_scroll and self.scroll_x < self.screen_width - width:
+                            self.scroll_x += 1
+                        elif not temp_horizontal_scroll and self.scroll_y < self.screen_height - height:
+                            self.scroll_y += 1
+        screen.blit(self.new_img, (0 - self.scroll_x, 0 - self.scroll_y))
+
+    def scroll_bar(self) -> None:
+        """显示滚动条"""
+        scroll_len: list = [width // self.screen_width, height // self.screen_height]
+        if self.screen_height > height:
+            pygame.draw.line(screen, (80, 80, 80), (width, 0), (width, height), 20)
+            pygame.draw.line(screen, (150, 150, 150), (width, self.scroll_y / (self.screen_height -
+                                                                                height) * height),
+                             (width, self.scroll_y / (self.screen_height - height) * height - scroll_len[1]),
+                             20)
+        if self.screen_width > width:
+            pygame.draw.line(screen, (80, 80, 80), (0, height), (width, height), 20)
+            pygame.draw.line(screen, (150, 150, 150), (self.scroll_x / (self.screen_width -
+                                                                         width) * width, height),
+                             (self.scroll_x / (self.screen_width - width) * width - scroll_len[0], height),
+                             20)
 
 
 class Pages:
     """游戏页面"""
 
     def __init__(self) -> None:
-        with open("data/Idea.json") as f:
+        with open("data/Idea.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
         self.click: any = Mouse(10)
@@ -1572,17 +1943,20 @@ class Pages:
 
     def home_page(self) -> None:
         """首页"""
+        self.custom_text.pos[1] = 120
         self.now_time: int = pygame.time.get_ticks()
         self.can_sleep: bool = True
         self.can_click: bool = False
         running: bool = True
         if date == "04-01" or date == "05-13":
             pop: any = PopupMessage(350, 100, image_usually_use[5], 1145141919810,
-                                    "今天是个好日子", (200, 200, 200), "assets/fonts/Text.TTF", 45, 20, 30)
+                                    "今天是个好日子", (200, 200, 200), "assets/fonts/Text.TTF", 45, 20, 30,
+                                    False, 0, 0, None, (60, 60), 25, 20)
         else:
-            pop: any = PopupMessage(350, 100, image_usually_use[5], 50,
+            pop: any = PopupMessage(350, 100, image_usually_use[5], 800,
                                     "欢迎回来!",
-                                    (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
+                                    (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
+                                    False, 0, 0, "assets/images/Hint.png", (60, 60), 25, 20)
         button1: any = Button("开始", 50, 230, 400, 100,
                               image_usually_use[0], image_usually_use[1],
                               image_usually_use[2], 1, 0, (1, 4), (4, 8))
@@ -1598,7 +1972,7 @@ class Pages:
         text1: any = CustomText(f"{datetime.now().strftime("%Y")} Code&Release", "assets/fonts/Text.TTF", 40,
                                 (255, 255, 255), [0, height // 40 * 39], 255, 0,
                                 (0, 20), (39, 40), False, False)
-        text2: any = CustomText(f"{version}", "assets/fonts/Text.TTF", 40,
+        text2: any = CustomText(f"{game_version}", "assets/fonts/Text.TTF", 40,
                                 (255, 255, 255), [width // 20 * 20, height // 40 * 39], 255,
                                 0, (20, 20), (39, 40), False, True)
         if date == "04-01" or date == "05-13" or self.account != -1:
@@ -1665,105 +2039,101 @@ class Pages:
 
     def setting_page(self) -> None:
         """设置部分功能的页面"""
-        global screen, width, height
+        global screen, width, height, volume
         self.now_time: int = pygame.time.get_ticks()
         self.can_sleep: bool = True
         self.can_click: bool = False
         running: bool = True
-        with open(f"data/User.json") as f:
+        with open(f"data/User.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
-        pop: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                "保存成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
+        scroll: any = ScrollBackground("assets/images/Level1.jpg", width, 1280, 0)
+        input_box1: any = CustomInputBox(f"音量{json_str["setting"][self.account]["sound"]}(0.0~1.0)", 1,
+                                         None, None, (255, 255, 255), (100, 100, 100),
+                                         "assets/fonts/Text.TTF", image_usually_use[3],
+                                         image_usually_use[4], 950, 50, 40, 170, height, 25,
+                                         (12, 128, 178), 4,
+                                         300, False, self.can_click, (1, 2), (8, 8))
+        input_box2: any = CustomInputBox(f"滚动速度{json_str["setting"][self.account]["scroll_speed"]}(1~10)", 1,
+                                         None, None, (255, 255, 255), (100, 100, 100),
+                                         "assets/fonts/Text.TTF", image_usually_use[3],
+                                         image_usually_use[4], 950, 50, 40, 170, height // 8 * 9, 25,
+                                         (12, 128, 178), 4,
+                                         300, False, self.can_click, (1, 2), (9, 8))
+        pop: any = PopupMessage(350, 100, image_usually_use[5], 500,
+                                "保存成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
+                                False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20)
+        pop2: any = PopupMessage(350, 100, image_usually_use[5], 500,
+                                 "保存出错", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
+                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20)
         button1: any = Button("退出", 200, 590, 400, 100,
                               image_usually_use[0], image_usually_use[1],
-                              image_usually_use[2], 1, 0, (2, 8), (25, 32))
+                              image_usually_use[2], 1, 0, (2, 8), (30, 32))
         button2: any = Button("保存", 700, 590, 400, 100,
                               image_usually_use[0], image_usually_use[1],
-                              image_usually_use[2], 1, 0, (6, 8), (25, 32))
-        button3: any = Button("下一页", 700, 590, 400, 100,
-                              image_usually_use[0], image_usually_use[1],
-                              image_usually_use[2], 1, 0, (4, 8), (15, 16))
-        switch1: any = Switch(170, 90, width // 4 * 3, height // 64 * 23,
+                              image_usually_use[2], 1, 0, (6, 8), (30, 32))
+        switch1: any = Switch(170, 90, width // 4 * 3, height // 8 * 3 - scroll.scroll_y,
                               image_usually_use[6], image_usually_use[7],
-                              json_str["setting"][self.account]["bullet_visible"], False, 0, (3, 4), (3, 8))
-        switch2: any = Switch(170, 90, width // 4 * 3, height // 64 * 31,
+                              json_str["setting"][self.account]["bullet_visible"], False, 1, (3, 4), (3, 8))
+        switch2: any = Switch(170, 90, width // 4 * 3, height // 8 * 4,
                               image_usually_use[6], image_usually_use[7],
-                              json_str["setting"][self.account]["dock_hidden"], False, 0, (3, 4), (4, 8))
-        switch3: any = Switch(170, 90, width // 4 * 3, height // 64 * 39,
+                              json_str["setting"][self.account]["dock_hidden"], False, 1, (3, 4), (4, 8))
+        switch3: any = Switch(170, 90, width // 4 * 3, height // 8 * 5,
                               image_usually_use[6], image_usually_use[7],
-                              json_str["setting"][self.account]["full_screen"], False, 0, (3, 4), (5, 8))
+                              json_str["setting"][self.account]["full_screen"], False, 1, (3, 4), (5, 8))
+        switch4: any = Switch(170, 90, width // 4 * 3, height // 8 * 6,
+                              image_usually_use[6], image_usually_use[7],
+                              json_str["setting"][self.account]["damage_visible"], False, 1, (3, 4), (6, 8))
+        switch5: any = Switch(170, 90, width // 4 * 3, height // 8 * 7,
+                              image_usually_use[6], image_usually_use[7],
+                              json_str["setting"][self.account]["float_damage_visible"], False, 1, (3, 4), (7, 8))
         text1: any = CustomText("使用文本显示子弹数量", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 16 * 5], 255, 0, (1, 6), (3, 8), False, False)
+                                (255, 255, 255), [width // 6, height // 8 * 3], 255, 1, (1, 6), (3, 8), False, False)
         text2: any = CustomText("数值面板碰到鼠标时透明", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 16 * 7], 255, 0, (1, 6), (4, 8), False, False)
+                                (255, 255, 255), [width // 6, height // 8 * 4], 255, 1, (1, 6), (4, 8), False, False)
         text3: any = CustomText("开启全屏", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 16 * 9], 255, 0, (1, 6), (5, 8), False, False)
+                                (255, 255, 255), [width // 6, height // 8 * 5], 255, 1, (1, 6), (5, 8), False, False)
+        text4: any = CustomText("显示伤害", "assets/fonts/Text.TTF", 50,
+                                (255, 255, 255), [width // 6, height // 8 * 6], 255, 1, (1, 6), (6, 8), False, False)
+        text5: any = CustomText("显示浮点伤害", "assets/fonts/Text.TTF", 50,
+                                (255, 255, 255), [width // 6, height // 8 * 7], 255, 1, (1, 6), (7, 8), False, False)
         while running:
             self.sleep(300)
+            self.custom_text.pos[1] = 120 - scroll.scroll_y
+            switch1.y = height // 8 * 3 - scroll.scroll_y
+            switch2.y = height // 8 * 4 - scroll.scroll_y
+            switch3.y = height // 8 * 5 - scroll.scroll_y
+            switch4.y = height // 8 * 6 - scroll.scroll_y
+            switch5.y = height // 8 * 7 - scroll.scroll_y
+            text1.pos[1] = height // 8 * 3 - scroll.scroll_y
+            text2.pos[1] = height // 8 * 4 - scroll.scroll_y
+            text3.pos[1] = height // 8 * 5 - scroll.scroll_y
+            text4.pos[1] = height // 8 * 6 - scroll.scroll_y
+            text5.pos[1] = height // 8 * 7 - scroll.scroll_y
+            input_box1.y = height - scroll.scroll_y
+            input_box2.y = height // 8 * 9 - scroll.scroll_y
             screen.fill((200, 200, 200))
             self.bg.update()
             self.bg.draw()
-            if button1.draw(50, (180, 180, 180), (255, 255, 255),
-                            (180, 180, 180), self.can_click):
-                self.home_page()
-                return
-            if button2.draw(50, (180, 180, 180), (255, 255, 255),
-                            (180, 180, 180), self.can_click):
-                json_str["setting"][self.account]["bullet_visible"] = switch1.activate
-                json_str["setting"][self.account]["dock_hidden"] = switch2.activate
-                json_str["setting"][self.account]["full_screen"] = switch3.activate
-                f: any = open(f"data/User.json", "w")
-                json_str2: str = json.dumps(json_str, ensure_ascii=False, indent=4)
-                f.write(json_str2)
-                f.flush()
-                f.close()
-                pop.activate()
-                if json_str["setting"][self.account]["full_screen"] and width == 1280 and height == 720:
-                    width = full_width
-                    height = full_height
-                    screen = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
-                    if date == "04-01" or date == "05-13":
-                        self.bg: any = DynamicBackground("assets/images/background_Uh.png", 40, width, height, False,
-                                                         False, True, False, 100)
-                        self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
-                                                           (100, 100, 100), [width // 2, 120], 255,
-                                                           3, (1, 2), (1, 2), True, False)
-                    else:
-                        self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
-                                                         False, True, False, 100)
-                        self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
-                                                           (100, 100, 100), [width // 2, 120], 255,
-                                                           3, (1, 2), (1, 2), True, False)
-                elif not json_str["setting"][self.account]["full_screen"] and width != 1280 and height != 720:
-                    width = 1280
-                    height = 720
-                    screen = pygame.display.set_mode((width, height))
-                    if date == "04-01" or date == "05-13":
-                        self.bg: any = DynamicBackground("assets/images/background_Uh.png", 40, width, height, False,
-                                                         False, True, False, 100)
-                        self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
-                                                           (100, 100, 100), [width // 2, 120], 255,
-                                                           3, (1, 2), (1, 2), True, False)
-                    else:
-                        self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
-                                                         False, True, False, 100)
-                        self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
-                                                           (100, 100, 100), [width // 2, 120], 255,
-                                                           3, (1, 2), (1, 2), True, False)
-            if button3.draw(50, (180, 180, 180), (255, 255, 255),
-                            (180, 180, 180), self.can_click):
-                self.setting_page2()
-                return
+            if input_box1.active:
+                input_box1.cursor_update()
+            else:
+                input_box1.cursor_visible = False
+            if input_box2.active:
+                input_box2.cursor_update()
+            else:
+                input_box2.cursor_visible = False
             switch1.draw(self.can_click)
             switch2.draw(self.can_click)
             switch3.draw(self.can_click)
-            self.custom_text.draw()
+            switch4.draw(self.can_click)
+            switch5.draw(self.can_click)
             text1.draw()
             text2.draw()
             text3.draw()
-            pop.draw()
-            self.click.click()
+            text4.draw()
+            text5.draw()
+            self.custom_text.draw()
             # 事件处理
             for events in pygame.event.get():
                 if events.type == pygame.QUIT:  # 检测到窗口关闭事件
@@ -1772,58 +2142,10 @@ class Pages:
                     exit()
                 elif events.type == pygame.MOUSEBUTTONDOWN:
                     self.click.click_activate()
-            clock.tick(tick_frequency)
-            # 绘图、更新屏幕等操作...
-            pygame.display.flip()  # 更新整个待显示的Surface到屏幕上
-
-    def setting_page2(self) -> None:
-        """设置部分功能的页面"""
-        global screen, width, height, volume
-        self.now_time: int = pygame.time.get_ticks()
-        self.can_sleep: bool = True
-        self.can_click: bool = False
-        running: bool = True
-        with open(f"data/User.json") as f:
-            json_str: any = json.load(f)
-            f.close()
-        pop: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                "保存成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
-        pop2: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                 "保存出错", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
-        button1: any = Button("退出", 200, 590, 400, 100,
-                              image_usually_use[0], image_usually_use[1],
-                              image_usually_use[2], 1, 0, (2, 8), (25, 32))
-        button2: any = Button("保存", 700, 590, 400, 100,
-                              image_usually_use[0], image_usually_use[1],
-                              image_usually_use[2], 1, 0, (6, 8), (25, 32))
-        button3: any = Button("上一页", 700, 590, 400, 100,
-                              image_usually_use[0], image_usually_use[1],
-                              image_usually_use[2], 1, 0, (4, 8), (15, 16))
-        input_box1: any = CustomInputBox(f"音量{json_str["setting"][self.account]["sound"]}(0.0~1.0)", 0,
-                                         None, None, (255, 255, 255), (100, 100, 100),
-                                         "assets/fonts/Text.TTF", image_usually_use[3],
-                                         image_usually_use[4], 950, 50, 40, 170, 250, 25,
-                                         (12, 128, 178), 4,
-                                         300, False, self.can_click, (1, 2), (3, 8))
-        switch1: any = Switch(170, 90, width // 4 * 3, height // 64 * 31,
-                              image_usually_use[6], image_usually_use[7],
-                              json_str["setting"][self.account]["damage_visible"], False, 0, (3, 4), (4, 8))
-        switch2: any = Switch(170, 90, width // 4 * 3, height // 64 * 39,
-                              image_usually_use[6], image_usually_use[7],
-                              json_str["setting"][self.account]["float_damage_visible"], False, 0, (3, 4), (5, 8))
-        text1: any = CustomText("显示伤害", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 16 * 7], 255, 0, (1, 6), (4, 8), False, False)
-        text2: any = CustomText("显示浮点伤害", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 16 * 7], 255, 0, (1, 6), (5, 8), False, False)
-        while running:
-            self.sleep(300)
-            screen.fill((200, 200, 200))
-            self.bg.update()
-            self.bg.draw()
-            if input_box1.active:
-                input_box1.cursor_update()
-            else:
-                input_box1.cursor_visible = False
+                input_box1.handle_event(events, self.can_click)
+                input_box2.handle_event(events, self.can_click)
+            input_box1.draw()  # 绘制输入框
+            input_box2.draw()
             if button1.draw(50, (180, 180, 180), (255, 255, 255),
                             (180, 180, 180), self.can_click):
                 self.home_page()
@@ -1837,40 +2159,63 @@ class Pages:
                             volume = float(input_box1.text)
                             input_box1.default_text = f"音量{json_str["setting"][self.account]["sound"]}(0.0~1.0)"
                         input_box1.delete()
+                    if input_box2.text != "":
+                        if 1 <= int(input_box2.text) <= 10:
+                            json_str["setting"][self.account]["scroll_speed"] = int(input_box2.text)
+                            input_box2.default_text = f"滚动速度{json_str["setting"][self.account]["scroll_speed"]}(1~10)"
+                        input_box2.delete()
                 except ValueError:
                     pop2.activate()
+                    input_box1.delete()
+                    input_box2.delete()
                 else:
-                    json_str["setting"][self.account]["damage_visible"] = switch1.activate
-                    json_str["setting"][self.account]["float_damage_visible"] = switch2.activate
-                    f: any = open(f"data/User.json", "w")
+                    json_str["setting"][self.account]["bullet_visible"] = switch1.activate
+                    json_str["setting"][self.account]["dock_hidden"] = switch2.activate
+                    json_str["setting"][self.account]["full_screen"] = switch3.activate
+                    json_str["setting"][self.account]["damage_visible"] = switch4.activate
+                    json_str["setting"][self.account]["float_damage_visible"] = switch5.activate
+                    if json_str["setting"][self.account]["full_screen"] and width == 1280 and height == 720:
+                        width = full_width
+                        height = full_height
+                        screen = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+                        if date == "04-01" or date == "05-13":
+                            self.bg: any = DynamicBackground("assets/images/background_Uh.png", 40, width, height,
+                                                             False, False, True, False, 100)
+                            self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
+                                                               (100, 100, 100), [width // 2, 120], 255,
+                                                               3, (1, 2), (1, 2), True, False)
+                        else:
+                            self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height,
+                                                             False, False, True, False, 100)
+                            self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
+                                                               (100, 100, 100), [width // 2, 120], 255,
+                                                               3, (1, 2), (1, 2), True, False)
+                    elif not json_str["setting"][self.account]["full_screen"] and width != 1280 and height != 720:
+                        width = 1280
+                        height = 720
+                        screen = pygame.display.set_mode((width, height))
+                        if date == "04-01" or date == "05-13":
+                            self.bg: any = DynamicBackground("assets/images/background_Uh.png", 40, width, height,
+                                                             False, False, True, False, 100)
+                            self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
+                                                               (100, 100, 100), [width // 2, 120], 255,
+                                                               3, (1, 2), (1, 2), True, False)
+                        else:
+                            self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
+                                                             False, True, False, 100)
+                            self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
+                                                               (100, 100, 100), [width // 2, 120], 255,
+                                                               3, (1, 2), (1, 2), True, False)
+                    f: any = open(f"data/User.json", "w", encoding="UTF-8")
                     json_str2: str = json.dumps(json_str, ensure_ascii=False, indent=4)
                     f.write(json_str2)
                     f.flush()
                     f.close()
                     pop.activate()
-            if button3.draw(50, (180, 180, 180), (255, 255, 255),
-                            (180, 180, 180), self.can_click):
-                self.setting_page()
-                return
-            switch1.draw(self.can_click)
-            if switch1.activate:
-                switch2.draw(self.can_click)
-            self.custom_text.draw()
-            text1.draw()
-            if switch1.activate:
-                text2.draw()
+            scroll.draw(json_str["setting"][self.account]["scroll_speed"])
             pop.draw()
             pop2.draw()
-            # 事件处理
-            for events in pygame.event.get():
-                if events.type == pygame.QUIT:  # 检测到窗口关闭事件
-                    # 游戏结束,清理工作
-                    pygame.quit()
-                    exit()
-                elif events.type == pygame.MOUSEBUTTONDOWN:
-                    self.click.click_activate()
-                input_box1.handle_event(events, self.can_click)
-            input_box1.draw()  # 绘制输入框
+            scroll.scroll_bar()
             self.click.click()
             clock.tick(tick_frequency)
             # 绘图、更新屏幕等操作...
@@ -1883,16 +2228,18 @@ class Pages:
         self.can_sleep: bool = True
         self.can_click: bool = False
         running: bool = True
-        with open("data/User.json") as f:
+        with open("data/User.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
-        with open("data/Idea.json") as f:
+        with open("data/Idea.json", encoding="UTF-8") as f:
             json_str2: any = json.load(f)
             f.close()
-        pop: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                "账户不存在", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
-        pop2: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                 "密码错误", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
+        pop: any = PopupMessage(350, 100, image_usually_use[5], 500,
+                                "账户不存在", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
+                                False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20)
+        pop2: any = PopupMessage(350, 100, image_usually_use[5], 500,
+                                 "密码错误", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
+                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20)
         button1: any = Button("登录", 150, 380, 400, 100, image_usually_use[0], image_usually_use[1],
                               image_usually_use[2], 1, 0, (2, 8), (5, 8))
         button2: any = Button("注册", 750, 380, 400, 100, image_usually_use[0], image_usually_use[1],
@@ -1914,10 +2261,12 @@ class Pages:
         if self.turn_page == -1:
             button4: any = Button("退出登录", 750, 550, 400, 100, image_usually_use[0], image_usually_use[1],
                                   image_usually_use[2], 1, 0, (6, 8), (7, 8))
-            pop3: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                     "已退出登录", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
-            pop4: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                     "登录成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
+            pop3: any = PopupMessage(350, 100, image_usually_use[5], 500,
+                                     "已退出登录", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
+                                     False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20)
+            pop4: any = PopupMessage(350, 100, image_usually_use[5], 500,
+                                     "登录成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
+                                     False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20)
         else:
             button4: any = ""
             pop3: any = ""
@@ -1982,7 +2331,7 @@ class Pages:
                         self.account: int = name_index
                         volume = json_str["setting"][self.account]["sound"]
                         json_str2["log_user"] = name_index
-                        f: any = open("data/Idea.json", "w")
+                        f: any = open("data/Idea.json", "w", encoding="UTF-8")
                         json_str3: any = json.dumps(json_str2, ensure_ascii=False, indent=4)
                         f.write(json_str3)
                         f.flush()
@@ -2008,26 +2357,27 @@ class Pages:
                                  (180, 180, 180), self.can_click)
                         and not self.link_up.active):
                     volume = 0.2
-                    if json_str["setting"][self.account]["full_screen"]:
-                        width = 1280
-                        height = 720
-                        screen = pygame.display.set_mode((width, height))
-                        if date == "04-01" or date == "05-13":
-                            self.bg: any = DynamicBackground("assets/images/background_Uh.png", 40, width, height,
-                                                             False,
-                                                             False, True, False, 100)
-                            self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
-                                                               (100, 100, 100), [width // 2, 120], 255,
-                                                               3, (1, 2), (1, 2), True, False)
-                        else:
-                            self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
-                                                             False, True, False, 100)
-                            self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
-                                                               (100, 100, 100), [width // 2, 120], 255,
-                                                               3, (1, 2), (1, 2), True, False)
+                    if self.account != -1:
+                        if json_str["setting"][self.account]["full_screen"]:
+                            width = 1280
+                            height = 720
+                            screen = pygame.display.set_mode((width, height))
+                            if date == "04-01" or date == "05-13":
+                                self.bg: any = DynamicBackground("assets/images/background_Uh.png", 40, width, height,
+                                                                 False,
+                                                                 False, True, False, 100)
+                                self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
+                                                                   (100, 100, 100), [width // 2, 120], 255,
+                                                                   3, (1, 2), (1, 2), True, False)
+                            else:
+                                self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
+                                                                 False, True, False, 100)
+                                self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
+                                                                   (100, 100, 100), [width // 2, 120], 255,
+                                                                   3, (1, 2), (1, 2), True, False)
                     self.account: int = -1
                     json_str2["log_user"] = -1
-                    f: any = open("data/Idea.json", "w")
+                    f: any = open("data/Idea.json", "w", encoding="UTF-8")
                     json_str3: any = json.dumps(json_str2, ensure_ascii=False, indent=4)
                     f.write(json_str3)
                     f.flush()
@@ -2070,10 +2420,12 @@ class Pages:
         self.can_sleep: bool = True
         self.can_click: bool = False
         running: bool = True
-        pop: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                "注册成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
-        pop2: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                 "不能使用这个名称", (255, 255, 255), "assets/fonts/Text.TTF", 32, 90, 35)
+        pop: any = PopupMessage(350, 100, image_usually_use[5], 500,
+                                "注册成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
+                                False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20)
+        pop2: any = PopupMessage(350, 100, image_usually_use[5], 500,
+                                 "不能使用这个名称", (255, 255, 255), "assets/fonts/Text.TTF", 32, 90, 35,
+                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20)
         button1: any = Button("注册", 50, 460, 400, 100, image_usually_use[0], image_usually_use[1],
                               image_usually_use[2], 1, 0, (1, 4), (7, 8))
         button2: any = Button("返回", 50, 565, 400, 100, image_usually_use[0], image_usually_use[1],
@@ -2104,19 +2456,19 @@ class Pages:
             self.custom_text.draw()
             if button1.draw(50, (180, 180, 180), (255, 255, 255),
                             (180, 180, 180), self.can_click) and pop.x == 0:
-                if input_box1.text != "":
-                    f: any = open("data/User.json")
-                    a: any = open("data/Level.json")
-                    b: any = open("data/Gun.json")
-                    d: any = open("data/Build.json")
-                    json_str2: any = json.load(a)
-                    json_str3: any = json.load(b)
-                    json_str4: any = json.load(f)
-                    json_str5: any = json.load(d)
-                    a.close()
-                    b.close()
+                f: any = open("data/User.json", encoding="UTF-8")
+                json_str4: any = json.load(f)
+                f.close()
+                if input_box1.text != "" and input_box1.text not in json_str4["name"]:
+                    f: any = open("data/Level.json", encoding="UTF-8")
+                    json_str2: any = json.load(f)
                     f.close()
-                    d.close()
+                    f: any = open("data/Gun.json", encoding="UTF-8")
+                    json_str3: any = json.load(f)
+                    f.close()
+                    f: any = open("data/Build.json", encoding="UTF-8")
+                    json_str5: any = json.load(f)
+                    f.close()
                     json_str4["name"].append(input_box1.text)
                     json_str4["password"].append(input_box2.text)
                     json_str4["level"].append(1)
@@ -2130,13 +2482,12 @@ class Pages:
                         json_str4["gun_level"][len(json_str4["gun_level"]) - 1].append(0)
                     json_str4["setting"].append({"bullet_visible": True, "dock_hidden": True,
                                                  "full_screen": False, "sound": 0.2, "damage_visible": False,
-                                                 "float_damage_visible": False})
+                                                 "float_damage_visible": False, "scroll_speed": 1})
                     json_str4["equipment_level"].append([])
-                    json_str4["equipment_level"][len(json_str4["equipment_level"]) - 1].append(0)
-                    for x in range(len(json_str5) - 1):
+                    for x in range(len(json_str5)):
                         json_str4["equipment_level"][len(json_str4["equipment_level"]) - 1].append(-1)
                     json_str4: any = json.dumps(json_str4, ensure_ascii=False, indent=4)
-                    f: any = open(f"data/User.json", "w")
+                    f: any = open(f"data/User.json", "w", encoding="UTF-8")
                     f.write(json_str4)
                     f.flush()
                     f.close()
@@ -2160,7 +2511,7 @@ class Pages:
                 input_box2.handle_event(events, self.can_click)
             input_box1.draw()  # 绘制输入框
             input_box2.draw()
-            if pop.x == pop.visible_time + 20:
+            if pop.x == 20:
                 self.choose_account_page()
                 return
             else:
@@ -2189,10 +2540,10 @@ class Pages:
         self.can_sleep: bool = True
         self.can_click: bool = False
         change_page: bool = False
-        with open(f"data/User.json") as f:
+        with open(f"data/User.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
-        with open(f"data/Level.json") as a:
+        with open(f"data/Level.json", encoding="UTF-8") as a:
             json_str2: any = json.load(a)
             a.close()
         running: bool = True
@@ -2276,16 +2627,18 @@ class Pages:
                                     image_usually_use[7], image_usually_use[7], False,
                                     True, 3, (1, 2), (1, 2)))
             else:
-                level.append(Switch(80, 80, json_str2[f"Level{json_str["level"][self.account]}"][f"{x}"]["Position"][0],
-                                    json_str2[f"Level{json_str["level"][self.account]}"][f"{x}"]["Position"][1],
+                level.append(Switch(80, 80, int(Decimal(str(json_str2[f"Level{json_str["level"]
+                                                                                             [self.account]}"][f"{x}"]
+                                                                                             ["Position"][0])) *
+                                                Decimal(str(multiple_width))),
+                                    int(Decimal(str(json_str2[f"Level{json_str["level"][self.account]}"][f"{x}"]
+                                                             ["Position"][1])) * Decimal(str(multiple_height))),
                                     f"assets/images/{select_icon}.png", f"assets/images/{select_icon}.png", False,
                                     True, 3, (1, 2), (1, 2)))
         if date == "04-01" or date == "05-13":
             Image(f"assets/images/Level.png", width, height, 0, 0, 0, 255, False, False, (1, 2), (1, 2)).draw()
             button1: any = Button("", 120, 50, 80, 80, image_usually_use[0],
                                   image_usually_use[1], image_usually_use[2], 1, 1, (2, 8), (1, 2))
-            button2: any = Button("", 120, 50, 80, 80, image_usually_use[0],
-                                  image_usually_use[1], image_usually_use[2], 1, 1, (3, 8), (1, 2))
             background_image: any = pygame.image.load("assets/images/background_load_strip_lang.png").convert_alpha()
         else:
             Image(f"assets/images/Level{json_str["level"][self.account]}.jpg", width, height, 0,
@@ -2293,9 +2646,6 @@ class Pages:
             button1: any = Button("", 120, 50, 80, 80, "assets/images/Button_back_inactive.png",
                                   "assets/images/Button_back_hover.png", "assets/images/Button_back_click.png",
                                   1, 1, (2, 8), (1, 2))
-            button2: any = Button("", 120, 50, 80, 80, "assets/images/Edit_Button_inactive.png",
-                                  "assets/images/Edit_Button_hover.png", "assets/images/Edit_Button_click.png",
-                                  1, 1, (3, 8), (1, 2))
             background_image: any = pygame.image.load("assets/images/Dock.png").convert_alpha()
         background_image: any = pygame.transform.scale(background_image,
                                                        (width, 100))
@@ -2317,11 +2667,6 @@ class Pages:
             if button1.draw(50, (180, 180, 180), (255, 255, 255),
                             (180, 180, 180), self.can_click):
                 self.turn_page: int = 1
-                self.can_click: bool = False
-                self.link_up.activate()
-            if button2.draw(50, (180, 180, 180), (255, 255, 255),
-                            (180, 180, 180), self.can_click) and False:
-                self.turn_page: int = 0
                 self.can_click: bool = False
                 self.link_up.activate()
             have_stage: list = []
@@ -2360,9 +2705,7 @@ class Pages:
             self.click.click()
             if self.link_up.can_exit:
                 if change_page:
-                    if self.turn_page == 0:
-                        self.edit_page1()
-                    elif self.turn_page == 2 or self.turn_page == 3:
+                    if self.turn_page == 2 or self.turn_page == 3:
                         self.game_page(choose_level)
                     elif self.turn_page == 4:
                         self.map_page()
@@ -2390,12 +2733,12 @@ class Pages:
         shoot: list = [False]
         change_page: bool = False
         difficult: int = self.turn_page - 2
-        with open(f"data/User.json") as f:
+        with open(f"data/User.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
-        with open(f"data/Level_data.json") as a:
-            json_str2: any = json.load(a)
-            a.close()
+        with open(f"data/Level_data.json", encoding="UTF-8") as f:
+            json_str2: any = json.load(f)
+            f.close()
         create: any = EntityCreate(game_start_time, json_str["level"][self.account], level, difficult)
         hp: int = json_str2[f"{json_str["level"][self.account]}-{level}"]["basic"]["HP"][difficult]
         enemies: int = 0
@@ -2491,43 +2834,45 @@ class Pages:
                 if create.approve_damage_text:
                     damage_text.append_surface(create.gun_damage)
                 damage_text.draw()
-            gun.draw(self.can_click)
+            gun.draw(self.can_click, len(equipments.build_id), json_str2[f"{json_str["level"][self.account]}-{level}"]
+                                                                                    ["basic"]["deployment_ceiling"]
+                                                                                    [difficult])
             image2.draw()
             image3.draw()
             image4.draw()
             image5.draw()
             image6.draw()
             # 创建一个带有 Alpha 通道的新 Surface 对象
-            surface: any = pygame.Surface((width, height), pygame.SRCALPHA)
+            alpha_surface: any = pygame.Surface((width, height), pygame.SRCALPHA)
             if json_str["setting"][self.account]["dock_hidden"] and not pause:
                 if dock_rect.colliderect(gun.gun_rect):
-                    pygame.draw.line(surface, (0, 0, 0, 150), (width // 4 * 3 - image6.image_width // 2, 53 +
-                                                               image6.image_width // 2),  # 血条加载
+                    pygame.draw.line(alpha_surface, (0, 0, 0, 150), (width // 4 * 3 - image6.image_width // 2, 53 +
+                                                                                    image6.image_width // 2),  # 血条加载
                                      (width // 4 * 3 + image6.image_width // 2, 53 + image6.image_width // 2), 12)
-                    pygame.draw.line(surface, (255, 255, 255, 150), (width // 4 * 3 - image6.image_width // 2 + 5,
-                                                                     53 + image6.image_width // 2),
+                    pygame.draw.line(alpha_surface, (255, 255, 255, 150), (width // 4 * 3 - image6.image_width // 2 + 5,
+                                                                                          53 + image6.image_width // 2),
                                      (width // 4 * 3 - image6.image_width // 2 + 5 + mp_len * (gun.mp_recover_now_time /
                                                                                                gun.mp_recover_time),
                                       53 + image6.image_width // 2), 8)
                 else:
-                    pygame.draw.line(surface, (0, 0, 0), (width // 4 * 3 - image6.image_width // 2, 53 +
-                                                          image6.image_width // 2),  # 血条加载
+                    pygame.draw.line(alpha_surface, (0, 0, 0), (width // 4 * 3 - image6.image_width // 2, 53 +
+                                                                               image6.image_width // 2),  # 血条加载
                                      (width // 4 * 3 + image6.image_width // 2, 53 + image6.image_width // 2), 12)
-                    pygame.draw.line(surface, (255, 255, 255), (width // 4 * 3 - image6.image_width // 2 + 5,
-                                                                53 + image6.image_width // 2),
+                    pygame.draw.line(alpha_surface, (255, 255, 255), (width // 4 * 3 - image6.image_width // 2 + 5,
+                                                                                     53 + image6.image_width // 2),
                                      (width // 4 * 3 - image6.image_width // 2 + 5 + mp_len * (gun.mp_recover_now_time /
                                                                                                gun.mp_recover_time),
                                       53 + image6.image_width // 2), 8)
             else:
-                pygame.draw.line(surface, (0, 0, 0), (width // 4 * 3 - image6.image_width // 2, 53 +
-                                                      image6.image_width // 2),  # 血条加载
+                pygame.draw.line(alpha_surface, (0, 0, 0), (width // 4 * 3 - image6.image_width // 2, 53 +
+                                                                           image6.image_width // 2),  # 血条加载
                                  (width // 4 * 3 + image6.image_width // 2, 53 + image6.image_width // 2), 12)
-                pygame.draw.line(surface, (255, 255, 255), (width // 4 * 3 - image6.image_width // 2 + 5,
-                                                            53 + image6.image_width // 2),
+                pygame.draw.line(alpha_surface, (255, 255, 255), (width // 4 * 3 - image6.image_width // 2 + 5,
+                                                                                 53 + image6.image_width // 2),
                                  (width // 4 * 3 - image6.image_width // 2 + 5 + mp_len * (gun.mp_recover_now_time /
                                                                                            gun.mp_recover_time),
                                   53 + image6.image_width // 2), 8)
-            screen.blit(surface, (0, 0))
+            screen.blit(alpha_surface, (0, 0))
             text1.draw()
             text2.draw()
             text3.draw()
@@ -2552,7 +2897,10 @@ class Pages:
             if can_pause:
                 if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     if pygame.time.get_ticks() - start_pause_time > 200:
-                        soundtrack.music_play(0, "assets/sounds/Button.wav", False)
+                        if date == "04-01" or date == "05-13":
+                            soundtrack.music_play(0, "assets/sounds/Shilang_Uh.wav", False)
+                        else:
+                            soundtrack.music_play(0, "assets/sounds/Button.wav", False)
                         pause: bool = not pause
                 if pause:
                     self.can_click: bool = False
@@ -2639,14 +2987,20 @@ class Pages:
                               image_usually_use[2], 1, 0, (1, 2), (7, 8))
         text1: any = CustomText("作战结束", "assets/fonts/Text.TTF", 100, (255, 255, 255),
                                 [width // 2, height // 4], 255, 0, (1, 2), (1, 4), True, False)
-        with open("data/User.json") as f:
+        with open("data/User.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
-        with open("data/Level.json") as f:
+        with open("data/Level.json", encoding="UTF-8") as f:
             json_str2: any = json.load(f)
             f.close()
         picture: int = 8
         if self.turn_page != 0:
+            if (json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_equipments"] is not None
+                    and json_str["equipment_level"][self.account][
+                        json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]
+                        ["Unlock_equipments"]] == -1):
+                json_str["equipment_level"][self.account][
+                    json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_equipments"]] = 0
             if json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Type"] == 0:
                 complete: int = 0
                 if self.turn_page == -1:
@@ -2662,7 +3016,7 @@ class Pages:
                                                                [f"{level - 1}"]["Level_id"]] < complete:
                     json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
                                                                 [f"{level - 1}"]["Level_id"]] = complete
-                if json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_Level_id"] != "null":
+                if json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_Level_id"] is not None:
                     if json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
                                                                    [f"{level - 1}"]["Unlock_Level_id"]] == -1:
                         json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
@@ -2672,12 +3026,12 @@ class Pages:
                                                             ["Level_id"]] = 3
                 picture: int = 6
             json_str3: any = json.dumps(json_str, ensure_ascii=False, indent=4)
-            with open("data/User.json", "w") as f:
+            with open("data/User.json", "w", encoding="UTF-8") as f:
                 f.write(json_str3)
                 f.flush()
                 f.close()
-        image: any = Image(f"assets/images/{picture}.png", 100, 100, 0,
-                           50, 0, 255, False, False, (1, 2), (1, 2))
+        images: any = Image(f"assets/images/{picture}.png", 100, 100, 0,
+                            50, 0, 255, False, False, (1, 2), (1, 2))
         while running:
             if not self.link_up.can_exit:
                 self.sleep(300)
@@ -2685,7 +3039,7 @@ class Pages:
             self.bg.update()
             self.bg.draw()
             text1.draw()
-            image.draw()
+            images.draw()
             if button1.draw(50, (180, 180, 180), (255, 255, 255),
                             (180, 180, 180), self.can_click):
                 self.turn_page: int = 0
@@ -2709,116 +3063,6 @@ class Pages:
                     exit()
                 elif events.type == pygame.MOUSEBUTTONDOWN:
                     self.click.click_activate()
-            clock.tick(tick_frequency)
-            # 绘图、更新屏幕等操作...
-            pygame.display.flip()  # 更新整个待显示的Surface到屏幕上
-
-    def edit_page1(self) -> None:
-        """编辑关卡的界面"""
-        self.now_time: int = pygame.time.get_ticks()
-        self.can_sleep: bool = True
-        self.can_click: bool = False
-        running: bool = True
-        if date == "04-01" or date == "05-13":
-            pop: any = PopupMessage(350, 100, image_usually_use[5], 1145141919810,
-                                    "今天是个好日子", (200, 200, 200), "assets/fonts/Text.TTF", 45, 20, 30)
-        else:
-            pop: any = PopupMessage(350, 100, image_usually_use[5], 50,
-                                    "欢迎回来!",
-                                    (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30)
-        button1: any = Button("保存", 50, 230, 400, 100,
-                              image_usually_use[0], image_usually_use[1],
-                              image_usually_use[2], 1, 0, (1, 4), (7, 8))
-        button2: any = Button("退出", 50, 350, 400, 100,
-                              image_usually_use[0], image_usually_use[1],
-                              image_usually_use[2], 1, 0, (3, 4), (7, 8))
-        input_box1: any = CustomInputBox("血量", 0, None, None, (255, 255, 255), (100, 100, 100),
-                                         "assets/fonts/Text.TTF", image_usually_use[3],
-                                         image_usually_use[4], 500, 50, 40, 170, 250, 3,
-                                         (12, 128, 178), 4,
-                                         300, False, self.can_click, (1, 2), (4, 16))
-        input_box2: any = CustomInputBox("敌人数量", 0, None, None, (255, 255, 255), (100, 100, 100),
-                                         "assets/fonts/Text.TTF", image_usually_use[3],
-                                         image_usually_use[4], 500, 50, 40, 170, 250, 3,
-                                         (12, 128, 178), 4,
-                                         300, False, self.can_click, (1, 2), (6, 16))
-        input_box3: any = CustomInputBox("困难敌人数量", 0, None, None, (255, 255, 255), (100, 100, 100),
-                                         "assets/fonts/Text.TTF", image_usually_use[3],
-                                         image_usually_use[4], 500, 50, 40, 170, 250, 3,
-                                         (12, 128, 178), 4,
-                                         300, False, self.can_click, (1, 2), (8, 16))
-        input_box4: any = CustomInputBox("子弹数量", 0, None, None, (255, 255, 255), (100, 100, 100),
-                                         "assets/fonts/Text.TTF", image_usually_use[3],
-                                         image_usually_use[4], 500, 50, 40, 170, 250, 4,
-                                         (12, 128, 178), 4,
-                                         300, False, self.can_click, (1, 2), (10, 16))
-        input_box5: any = CustomInputBox("困难子弹数量", 0, None, None, (255, 255, 255), (100, 100, 100),
-                                         "assets/fonts/Text.TTF", image_usually_use[3],
-                                         image_usually_use[4], 500, 50, 40, 170, 250, 4,
-                                         (12, 128, 178), 4,
-                                         300, False, self.can_click, (1, 2), (12, 16))
-        while running:
-            if not self.link_up.can_exit:
-                self.sleep(300)
-            screen.fill((200, 200, 200))
-            self.bg.update()
-            self.bg.draw()
-            if input_box1.active:
-                input_box1.cursor_update()
-            else:
-                input_box1.cursor_visible = False
-            if input_box2.active:
-                input_box2.cursor_update()
-            else:
-                input_box2.cursor_visible = False
-            if input_box3.active:
-                input_box3.cursor_update()
-            else:
-                input_box3.cursor_visible = False
-            if input_box4.active:
-                input_box4.cursor_update()
-            else:
-                input_box4.cursor_visible = False
-            if input_box5.active:
-                input_box5.cursor_update()
-            else:
-                input_box5.cursor_visible = False
-            if button1.draw(50, (180, 180, 180), (255, 255, 255),
-                            (180, 180, 180), self.can_click):
-                pass
-            if button2.draw(50, (180, 180, 180), (255, 255, 255),
-                            (180, 180, 180), self.can_click):
-                self.turn_page: int = 1
-                self.can_click: bool = False
-                self.link_up.activate()
-            # 事件处理
-            for events in pygame.event.get():
-                if events.type == pygame.QUIT:  # 检测到窗口关闭事件
-                    # 游戏结束,清理工作
-                    pygame.quit()
-                    exit()
-                elif events.type == pygame.MOUSEBUTTONDOWN:
-                    self.click.click_activate()
-                input_box1.handle_event(events, self.can_click)
-                input_box2.handle_event(events, self.can_click)
-                input_box3.handle_event(events, self.can_click)
-                input_box4.handle_event(events, self.can_click)
-                input_box5.handle_event(events, self.can_click)
-            input_box1.draw()  # 绘制输入框
-            input_box2.draw()
-            input_box3.draw()
-            input_box4.draw()
-            input_box5.draw()
-            self.click.click()
-            pop.draw()
-            if self.link_up.can_exit:
-                if self.turn_page == 1:
-                    self.map_page()
-                    return
-                else:
-                    self.link_up.exit()
-            else:
-                self.link_up.access(0)
             clock.tick(tick_frequency)
             # 绘图、更新屏幕等操作...
             pygame.display.flip()  # 更新整个待显示的Surface到屏幕上

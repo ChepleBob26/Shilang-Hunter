@@ -1,0 +1,16 @@
+{
+  "0": {
+    "name": "Shield",
+    "give": [1],
+    "give_numerical": [3],
+    "enemy_type": [0, 1, 2],
+    "Image_type": ".png"
+  },
+  "1": {
+    "name": "Kill",
+    "give": [0, 2],
+    "give_numerical": [1, 2],
+    "enemy_type": [0],
+    "Image_type": ".png"
+  }
+}

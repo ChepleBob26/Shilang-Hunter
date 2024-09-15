@@ -40,5 +40,51 @@
     ],
     "Animation_count": 2,
     "Image_type": ".svg"
+  },
+  "Heavy_cat": {
+    "HP": 50,
+    "Def": 100,
+    "Speed": 4,
+    "Enemy_type": 0,
+    "invincible_time": 1000,
+    "minus_HP": 1,
+    "scale": [
+      100,
+      120
+    ],
+    "Animation_count": 2,
+    "Image_type": ".svg"
+  },
+  "Attack_Cat": {
+    "HP": 200,
+    "Def": 5,
+    "Speed": 6,
+    "Enemy_type": 1,
+    "cause_effects": [1],
+    "cause_reason": ["global"],
+    "invincible_time": 800,
+    "minus_HP": 3,
+    "scale": [
+      180,
+      180
+    ],
+    "Animation_count": 2,
+    "Image_type": ".svg"
+  },
+  "Defend_Cat": {
+    "HP": 250,
+    "Def": 8,
+    "Speed": 3,
+    "Enemy_type": 1,
+    "cause_effects": [0],
+    "cause_reason": ["global"],
+    "invincible_time": 1000,
+    "minus_HP": 3,
+    "scale": [
+      150,
+      180
+    ],
+    "Animation_count": 2,
+    "Image_type": ".svg"
   }
 }
