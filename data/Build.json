@@ -1,6 +1,7 @@
 {
   "0": {
     "name": "Landmine",
+    "Chinese_name": "地雷",
     "type": "passive_attack",
     "damage": 50,
     "damage_type": true,

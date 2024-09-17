@@ -10,7 +10,7 @@
         200
       ],
       "Type": 0,
-      "Unlock_Level_id": 1,
+      "Unlock_Level_id": [1],
       "Unlock_equipments": null
     },
     "1": {
@@ -23,7 +23,7 @@
         200
       ],
       "Type": 0,
-      "Unlock_Level_id": 2,
+      "Unlock_Level_id": [2],
       "Unlock_equipments": null
     },
     "2": {
@@ -36,8 +36,8 @@
         200
       ],
       "Type": 0,
-      "Unlock_Level_id": 3,
-      "Unlock_equipments": 0
+      "Unlock_Level_id": [3],
+      "Unlock_equipments": [0]
     },
     "3": {
       "Level_id": 3,
@@ -49,19 +49,19 @@
         200
       ],
       "Type": 0,
-      "Unlock_Level_id": 4,
+      "Unlock_Level_id": [4],
       "Unlock_equipments": null
     },
     "4": {
       "Level_id": 4,
-      "Title": "1-5 据守",
+      "Title": "S1-1 据守",
       "Description": "你闯入了一群施朗的基地，这里有重兵把守。",
       "Lock_Description": "完成1-4",
       "Position": [
         1100,
         200
       ],
-      "Type": 0,
+      "Type": 1,
       "Unlock_Level_id": null,
       "Unlock_equipments": null
     }

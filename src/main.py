@@ -14,21 +14,23 @@ Also, Please ensure that requirements.txt packs is already installed before runn
 - Warning: Don't open this program on April 1st and May 13th!(Just For Fun!)
 (Except for these two days, no code will torture the user.)
 """
-from decimal import Decimal
-from datetime import datetime
-from pygame import *
-import pygame
 import json
+from datetime import datetime
+from decimal import Decimal
+from math import ceil
 from os import chdir, path
 from typing import Union
+import pygame
+from pygame import *
+
 chdir(path.dirname("../"))
 # 现在当前工作目录就是项目根目录了,可以进行文件操作
 pygame.init()
 # 初始化音频
 pygame.mixer.init()
 clock: any = pygame.time.Clock()
-tick_frequency: int = 30
-game_version: str = "1.2.2"
+tick_frequency: int = 60
+game_version: str = "1.2.3"
 date: str = datetime.now().strftime("%m-%d")
 # date: str = "04-01"
 if date == "04-01" or date == "05-13":  # 游戏标题和图标初始化
@@ -143,9 +145,10 @@ class PopupMessage:
     def __init__(self, popup_width: int, popup_height: int, img_path: str, visible_time: int,
                  popup_text: str, text_color: tuple, text_fonts: str, text_size: int, text_x: int, text_y: int,
                  lateral_display: bool, popup_x: int, popup_y: int, input_image: Union[str, None], input_scale: tuple,
-                 input_x: int, input_y: int) -> None:
+                 input_x: int, input_y: int, queue: list, pop_id: int, auto_fit: Union[tuple, None]) -> None:
         self.popup_rect: any = None
         self.lateral_display: bool = lateral_display
+        self.pop_id: int = pop_id
         self.popup_x: int = popup_x
         self.popup_y: int = popup_y
         self.text_x: int = text_x
@@ -155,24 +158,33 @@ class PopupMessage:
         self.text_color: tuple = text_color
         self.text_size: int = text_size
         self.text_fonts: str = text_fonts
-        self.popup_height: int = popup_height
         self.input_x: int = input_x
         self.count: int = 0
         self.input_y: int = input_y
         self.enable_change: bool = True
         self.x: int = 0
-        self.popup_width: int = popup_width
         self.img_path: str = img_path
         self.visible_time: int = visible_time
         self.input_image: Union[str, None] = input_image
+        self.font: any = pygame.font.Font(self.text_fonts, self.text_size)
+        self.txt_surface: any = self.font.render(self.popup_text, True, self.text_color)
+        if isinstance(auto_fit, tuple):
+            self.popup_width: int = max(popup_width, max(input_x + input_scale[0], text_x +
+                                                         self.txt_surface.get_size()[0]) + auto_fit[0])
+            self.popup_height: int = max(popup_height, max(input_y + input_scale[1], text_y +
+                                                           self.txt_surface.get_size()[1]) + auto_fit[1])
+        else:
+            self.popup_width: int = popup_width
+            self.popup_height: int = popup_height
         if isinstance(self.input_image, str):
             self.input_image2: any = pygame.image.load(input_image)
             self.input_image2: any = pygame.transform.scale(self.input_image2, input_scale)
         self.img_origin: any = pygame.image.load(self.img_path).convert_alpha()
         self.img_new: any = pygame.transform.scale(self.img_origin, (self.popup_width, self.popup_height))
         self.direction: int = 0
-        self.font: any = pygame.font.Font(self.text_fonts, self.text_size)
-        self.txt_surface: any = self.font.render(self.popup_text, True, self.text_color)
+        self.queue: list = queue
+        self.last_visible: bool = False
+        self.queue_id: int = 0
 
     def draw(self) -> None:
         """绘制弹窗"""
@@ -194,10 +206,12 @@ class PopupMessage:
                     screen.blit(self.txt_surface, (direction[0] + self.text_x, direction[1] + self.text_y))
                 else:
                     self.direction: int = width - self.x * (self.popup_width // 10)
-                    screen.blit(self.img_new, (self.direction, 0))
-                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
+                    screen.blit(self.img_new, (self.direction, 0 + (self.queue_id * self.popup_height)))
+                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y +
+                                                   (self.queue_id * self.popup_height)))
                     if isinstance(self.input_image, str):
-                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y))
+                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y +
+                                                        (self.queue_id * self.popup_height)))
             elif not self.enable_change:  # 中间状态
                 if pygame.time.get_ticks() - self.count >= self.visible_time:
                     self.enable_change: bool = True
@@ -210,10 +224,12 @@ class PopupMessage:
                     screen.blit(self.txt_surface, (direction[0] + self.text_x, direction[1] + self.text_y))
                 else:
                     self.direction: int = width - self.popup_width
-                    screen.blit(self.img_new, (self.direction, 0))
-                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
+                    screen.blit(self.img_new, (self.direction, 0 + (self.queue_id * self.popup_height)))
+                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y +
+                                                   (self.queue_id * self.popup_height)))
                     if isinstance(self.input_image, str):
-                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y))
+                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y +
+                                                        (self.queue_id * self.popup_height)))
             else:  # 结束状态
                 if self.lateral_display:
                     self.img_new.set_alpha(255 - 255 // 10 * (self.x - 10))
@@ -227,19 +243,25 @@ class PopupMessage:
                 else:
                     self.direction: int = (width - (20 - self.x) *
                                            (self.popup_width // 10))
-                    screen.blit(self.img_new, (self.direction, 0))
-                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y))
+                    screen.blit(self.img_new, (self.direction, 0 + (self.queue_id * self.popup_height)))
+                    screen.blit(self.txt_surface, (self.direction + self.text_x, 0 + self.text_y +
+                                                   (self.queue_id * self.popup_height)))
                     if isinstance(self.input_image, str):
-                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y))
-            return
+                        screen.blit(self.input_image2, (self.direction + self.input_x, 0 + self.input_y +
+                                                        (self.queue_id * self.popup_height)))
         else:
             self.visible: bool = False  # 其他情况隐藏弹窗
-            return
+            if self.visible != self.last_visible:
+                del self.queue[0]
+        self.last_visible: bool = self.visible
 
     def activate(self) -> None:
         """弹窗激活方法"""
-        self.visible: bool = True
-        self.x: int = 0
+        if self.pop_id not in self.queue:
+            self.queue.append(self.pop_id)
+            self.queue_id: int = len(self.queue) - 1
+            self.visible: bool = True
+            self.x: int = 0
 
 
 class DynamicBackground:
@@ -491,12 +513,15 @@ class Switch:
     def level_draw(self, level_id: int, level: int, account: int, can_active: bool) -> int:
         """当作为关卡时，绘制关卡信息"""
         if self.is_level and can_active:
+            with open(f"data/User.json", encoding="UTF-8") as f:
+                json_str: any = json.load(f)
+                f.close()
             with open(f"data/Level.json", encoding="UTF-8") as f:
                 json_str2: any = json.load(f)
                 f.close()
-            with open(f"data/User.json", encoding="UTF-8") as a:
-                json_str: any = json.load(a)
-                a.close()
+            with open(f"data/Build.json", encoding="UTF-8") as f:
+                json_str3: any = json.load(f)
+                f.close()
             if self.temp < 10:
                 self.temp += 1
             button: any = ""
@@ -544,15 +569,45 @@ class Switch:
             ):
                 render_main: str = "未解锁"
                 render_text: str = json_str2[f"Level{json_str["level"][account]}"][f"{level_id}"]["Lock_Description"]
+                render_type: str = "未知"
+                render_reward: str = ""
             else:
                 render_main: str = json_str2[f"Level{level}"][f"{level_id}"]["Title"]
                 render_text: str = json_str2[f"Level{level}"][f"{level_id}"]["Description"]
+                if json_str2[f"Level{json_str["level"][account]}"][f"{level_id}"]["Type"] == 0:
+                    render_type: str = "主线关卡"
+                elif json_str2[f"Level{json_str["level"][account]}"][f"{level_id}"]["Type"] == 1:
+                    render_type: str = "支线关卡"
+                else:
+                    render_type: str = "前进节点"
+                render_reward: str = "首次通关奖励:"
+                if json_str2[f"Level{json_str["level"][account]}"][f"{level_id}"]["Unlock_equipments"] is not None:
+                    for x in range(len(json_str2[f"Level{json_str["level"][account]}"][f"{level_id}"]
+                                       ["Unlock_equipments"])):
+                        render_reward += f"解锁{json_str3[f"{json_str2[f"Level{json_str["level"][account]}"]
+                                                        [f"{level_id}"]["Unlock_equipments"][x]}"]["Chinese_name"]}"
             screen.blit(pygame.font.Font('assets/fonts/Text.TTF', 50)
                         .render(render_main, True, (255, 255, 255)),
                         (180, (height + 10) - 20 * self.temp))
             screen.blit(pygame.font.Font('assets/fonts/Text.TTF', 32)
                         .render(render_text, True, (255, 255, 255)),
                         (180, (height + 70) - 20 * self.temp))
+            if json_str["progress"][account][json_str2[f"Level{json_str["level"][account]}"][f"{level_id}"]
+                                                      [
+                "Level_id"
+            ]
+            ] != -1:
+                screen.blit(pygame.font.Font('assets/fonts/Text.TTF', 26)
+                            .render(render_type, True, (255, 255, 255)),
+                            (60, (height + 25) - 20 * self.temp))
+            if (json_str["progress"][account][json_str2[f"Level{json_str["level"][account]}"][f"{level_id}"]
+                                                       [
+                "Level_id"
+            ]
+            ] == 0 and render_reward != "首次通关奖励:"):
+                screen.blit(pygame.font.Font('assets/fonts/Text.TTF', 30)
+                            .render(render_reward, True, (255, 255, 0)),
+                            (180, (height + 110) - 20 * self.temp))
             if (json_str["progress"][account][json_str2[f"Level{json_str["level"][account]}"][f"{level_id}"]
                 [
                     "Level_id"
@@ -713,7 +768,8 @@ class CustomText:
     """输出文本"""
 
     def __init__(self, text: str, font_path: str, font_size: int, font_color: tuple, pos: list, alpha: int,
-                 center: int, x_grid: tuple, y_grid: tuple, center2: bool, center3: bool) -> None:
+                 center: int, x_grid: tuple, y_grid: tuple, center2: bool, center3: bool, max_text: Union[int, None])\
+            -> None:
         """初始化自定义文本对象"""
         self.font_color: any = font_color
         self.font_path: str = font_path
@@ -726,6 +782,7 @@ class CustomText:
         self.center3: bool = center3
         self.x_grid: tuple = x_grid
         self.y_grid: tuple = y_grid
+        self.max_text: Union[int, None] = max_text
 
     def draw(self) -> None:
         """在屏幕上绘制文本"""
@@ -735,17 +792,33 @@ class CustomText:
             if self.center != 1:
                 self.pos[1] = height // self.y_grid[1] * self.y_grid[0]
         fonts: any = pygame.font.Font(self.font_path, self.font_size)
-        text_surface: any = fonts.render(self.text, True, self.font_color)
-        text_surface.set_alpha(self.alpha)
-        transparent_surface = pygame.Surface(text_surface.get_size(), pygame.SRCALPHA)
-        transparent_surface.blit(text_surface, (0, 0))
-        text_rect: any = transparent_surface.get_rect(center=self.pos)
-        if not self.center2:
-            if self.center3:
-                text_rect.right = self.pos[0]
-            else:
-                text_rect.left = self.pos[0]
-        screen.blit(transparent_surface, text_rect)
+        if isinstance(self.max_text, int) and self.max_text > 0:
+            for x in range(ceil(len(self.text) / self.max_text)):
+                text_surface: any = fonts.render(self.text[0 + self.max_text * x:self.max_text + self.max_text * x],
+                                                 True, self.font_color)
+                text_surface.set_alpha(self.alpha)
+                transparent_surface = pygame.Surface(text_surface.get_size(), pygame.SRCALPHA)
+                transparent_surface.blit(text_surface, (0, 0))
+                text_rect: any = transparent_surface.get_rect(center=self.pos)
+                text_rect.bottom += x * (text_surface.get_size()[1] - ceil(self.font_size / 6))
+                if not self.center2:
+                    if self.center3:
+                        text_rect.right = self.pos[0]
+                    else:
+                        text_rect.left = self.pos[0]
+                screen.blit(transparent_surface, text_rect)
+        else:
+            text_surface: any = fonts.render(self.text, True, self.font_color)
+            text_surface.set_alpha(self.alpha)
+            transparent_surface = pygame.Surface(text_surface.get_size(), pygame.SRCALPHA)
+            transparent_surface.blit(text_surface, (0, 0))
+            text_rect: any = transparent_surface.get_rect(center=self.pos)
+            if not self.center2:
+                if self.center3:
+                    text_rect.right = self.pos[0]
+                else:
+                    text_rect.left = self.pos[0]
+            screen.blit(transparent_surface, text_rect)
 
 
 class CustomInputBox:
@@ -991,6 +1064,7 @@ class EntityCreate:
         self.effect: list[list] = []
         self.pop: list = []
         self.enable_pop: list = []
+        self.queue: list = []
         for y in range(json_str[f"{level}-{stage}"]["basic"]["popups"][self.difficult]):
             self.pop.append(PopupMessage(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["width"] if
                                          json_str[f"{level}-{stage}"][f"entity{difficult}"][f"popups{y}"]["width"] !=
@@ -1019,14 +1093,16 @@ class EntityCreate:
                                          json_str[f"{level}-{stage}"][f"entity{difficult}"]
                                          [f"popups{y}"]["input_height"]), json_str[f"{level}-{stage}"]
                                          [f"entity{difficult}"][f"popups{y}"]["input_x"], json_str[f"{level}-{stage}"]
-                                         [f"entity{difficult}"][f"popups{y}"]["input_y"]))
+                                         [f"entity{difficult}"][f"popups{y}"]["input_y"], self.queue, 0,
+                                         None))
             if self.pop[y].lateral_display:
                 self.pop[y].img_path = image_usually_use[9]
             self.enable_pop.append(False)
         for x in range(json_str[f"{level}-{stage}"]["basic"]["enemy"][difficult]):
             (self.location.append([Decimal(str(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"{x}"]["pos"][0])) *
                                    Decimal(str(self.multiple_width)),
-                                   Decimal(str(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"{x}"]["pos"][1]))]))
+                                   Decimal(str(json_str[f"{level}-{stage}"][f"entity{difficult}"][f"{x}"]["pos"][1])) *
+                                   Decimal(str(self.multiple_height))]))
             self.effect.append([])
             self.enable_change_animation.append(False)
             self.blit.append(False)
@@ -1056,10 +1132,8 @@ class EntityCreate:
         self.start_frozen_time: int = 0
         self.total_frozen_time: int = 0
         self.temp_save_frozen_time: int = 0
-        if json_str[f"{self.level}-{self.stage}"]["basic"]["danger_line"] == "height":
-            self.danger_line_y: int = height
-        else:
-            self.danger_line_y: int = json_str[f"{self.level}-{self.stage}"]["basic"]["danger_line"]
+        self.danger_line_y: int = int(Decimal(str(json_str[f"{self.level}-{self.stage}"]["basic"]["danger_line"]
+                                                          [difficult])) * Decimal(str(self.multiple_height)))
 
     def check(self, can_active: bool) -> None:
         """检查是否可以生成实体"""
@@ -1924,13 +1998,15 @@ class Pages:
                                                                                      "images/background_load_strip_lang"
                                                                                      ".png")
             self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
-                                               (100, 100, 100), [width // 2, 120], 255, 3, (1, 2), (1, 2), True, False)
+                                               (100, 100, 100), [width // 2, 120], 255, 3, (1, 2), (1, 2), True, False,
+                                               None)
         else:
             self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
                                              False, True, False, 100)
             self.link_up: any = LinkUp(20, "assets/images/Load_background.png", "assets/images/Load_strip.png")
             self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
-                                               (100, 100, 100), [width // 2, 120], 255, 3, (1, 2), (1, 2), True, False)
+                                               (100, 100, 100), [width // 2, 120], 255, 3, (1, 2), (1, 2), True, False,
+                                               None)
 
     def sleep(self, timing: int) -> None:
         """在每次页面切换后停止一段时间各类交互键以避免误触"""
@@ -1947,16 +2023,18 @@ class Pages:
         self.now_time: int = pygame.time.get_ticks()
         self.can_sleep: bool = True
         self.can_click: bool = False
+        queue: list = []
         running: bool = True
         if date == "04-01" or date == "05-13":
             pop: any = PopupMessage(350, 100, image_usually_use[5], 1145141919810,
                                     "今天是个好日子", (200, 200, 200), "assets/fonts/Text.TTF", 45, 20, 30,
-                                    False, 0, 0, None, (60, 60), 25, 20)
+                                    False, 0, 0, None, (60, 60), 25, 20, queue, 0, None)
         else:
             pop: any = PopupMessage(350, 100, image_usually_use[5], 800,
                                     "欢迎回来!",
                                     (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
-                                    False, 0, 0, "assets/images/Hint.png", (60, 60), 25, 20)
+                                    False, 0, 0, "assets/images/Hint.png", (60, 60), 25,
+                                    20, queue, 0, None)
         button1: any = Button("开始", 50, 230, 400, 100,
                               image_usually_use[0], image_usually_use[1],
                               image_usually_use[2], 1, 0, (1, 4), (4, 8))
@@ -1971,10 +2049,10 @@ class Pages:
                               image_usually_use[2], 1, 0, (1, 4), (6, 8))
         text1: any = CustomText(f"{datetime.now().strftime("%Y")} Code&Release", "assets/fonts/Text.TTF", 40,
                                 (255, 255, 255), [0, height // 40 * 39], 255, 0,
-                                (0, 20), (39, 40), False, False)
+                                (0, 20), (39, 40), False, False, None)
         text2: any = CustomText(f"{game_version}", "assets/fonts/Text.TTF", 40,
                                 (255, 255, 255), [width // 20 * 20, height // 40 * 39], 255,
-                                0, (20, 20), (39, 40), False, True)
+                                0, (20, 20), (39, 40), False, True, None)
         if date == "04-01" or date == "05-13" or self.account != -1:
             pop.activate()
         if self.account == -1:
@@ -2043,6 +2121,7 @@ class Pages:
         self.now_time: int = pygame.time.get_ticks()
         self.can_sleep: bool = True
         self.can_click: bool = False
+        queue: list = []
         running: bool = True
         with open(f"data/User.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
@@ -2062,10 +2141,10 @@ class Pages:
                                          300, False, self.can_click, (1, 2), (9, 8))
         pop: any = PopupMessage(350, 100, image_usually_use[5], 500,
                                 "保存成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
-                                False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20)
+                                False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20, queue, 0, None)
         pop2: any = PopupMessage(350, 100, image_usually_use[5], 500,
                                  "保存出错", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
-                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20)
+                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20, queue, 1, None)
         button1: any = Button("退出", 200, 590, 400, 100,
                               image_usually_use[0], image_usually_use[1],
                               image_usually_use[2], 1, 0, (2, 8), (30, 32))
@@ -2088,15 +2167,20 @@ class Pages:
                               image_usually_use[6], image_usually_use[7],
                               json_str["setting"][self.account]["float_damage_visible"], False, 1, (3, 4), (7, 8))
         text1: any = CustomText("使用文本显示子弹数量", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 8 * 3], 255, 1, (1, 6), (3, 8), False, False)
+                                (255, 255, 255), [width // 6, height // 8 * 3], 255, 1, (1, 6), (3, 8), False, False,
+                                12)
         text2: any = CustomText("数值面板碰到鼠标时透明", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 8 * 4], 255, 1, (1, 6), (4, 8), False, False)
+                                (255, 255, 255), [width // 6, height // 8 * 4], 255, 1, (1, 6), (4, 8), False, False,
+                                12)
         text3: any = CustomText("开启全屏", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 8 * 5], 255, 1, (1, 6), (5, 8), False, False)
+                                (255, 255, 255), [width // 6, height // 8 * 5], 255, 1, (1, 6), (5, 8), False, False,
+                                12)
         text4: any = CustomText("显示伤害", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 8 * 6], 255, 1, (1, 6), (6, 8), False, False)
+                                (255, 255, 255), [width // 6, height // 8 * 6], 255, 1, (1, 6), (6, 8), False, False,
+                                12)
         text5: any = CustomText("显示浮点伤害", "assets/fonts/Text.TTF", 50,
-                                (255, 255, 255), [width // 6, height // 8 * 7], 255, 1, (1, 6), (7, 8), False, False)
+                                (255, 255, 255), [width // 6, height // 8 * 7], 255, 1, (1, 6), (7, 8), False, False,
+                                12)
         while running:
             self.sleep(300)
             self.custom_text.pos[1] = 120 - scroll.scroll_y
@@ -2183,13 +2267,13 @@ class Pages:
                                                              False, False, True, False, 100)
                             self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
                                                                (100, 100, 100), [width // 2, 120], 255,
-                                                               3, (1, 2), (1, 2), True, False)
+                                                               3, (1, 2), (1, 2), True, False, None)
                         else:
                             self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height,
                                                              False, False, True, False, 100)
                             self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
                                                                (100, 100, 100), [width // 2, 120], 255,
-                                                               3, (1, 2), (1, 2), True, False)
+                                                               3, (1, 2), (1, 2), True, False, None)
                     elif not json_str["setting"][self.account]["full_screen"] and width != 1280 and height != 720:
                         width = 1280
                         height = 720
@@ -2199,13 +2283,13 @@ class Pages:
                                                              False, False, True, False, 100)
                             self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
                                                                (100, 100, 100), [width // 2, 120], 255,
-                                                               3, (1, 2), (1, 2), True, False)
+                                                               3, (1, 2), (1, 2), True, False, None)
                         else:
                             self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
                                                              False, True, False, 100)
                             self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
                                                                (100, 100, 100), [width // 2, 120], 255,
-                                                               3, (1, 2), (1, 2), True, False)
+                                                               3, (1, 2), (1, 2), True, False, None)
                     f: any = open(f"data/User.json", "w", encoding="UTF-8")
                     json_str2: str = json.dumps(json_str, ensure_ascii=False, indent=4)
                     f.write(json_str2)
@@ -2227,6 +2311,7 @@ class Pages:
         self.now_time: int = pygame.time.get_ticks()
         self.can_sleep: bool = True
         self.can_click: bool = False
+        queue: list = []
         running: bool = True
         with open("data/User.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
@@ -2236,10 +2321,12 @@ class Pages:
             f.close()
         pop: any = PopupMessage(350, 100, image_usually_use[5], 500,
                                 "账户不存在", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
-                                False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20)
+                                False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20,
+                                queue, 0, None)
         pop2: any = PopupMessage(350, 100, image_usually_use[5], 500,
                                  "密码错误", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
-                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20)
+                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20,
+                                 queue, 1, None)
         button1: any = Button("登录", 150, 380, 400, 100, image_usually_use[0], image_usually_use[1],
                               image_usually_use[2], 1, 0, (2, 8), (5, 8))
         button2: any = Button("注册", 750, 380, 400, 100, image_usually_use[0], image_usually_use[1],
@@ -2263,10 +2350,12 @@ class Pages:
                                   image_usually_use[2], 1, 0, (6, 8), (7, 8))
             pop3: any = PopupMessage(350, 100, image_usually_use[5], 500,
                                      "已退出登录", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
-                                     False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20)
+                                     False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20,
+                                     queue, 2, None)
             pop4: any = PopupMessage(350, 100, image_usually_use[5], 500,
                                      "登录成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
-                                     False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20)
+                                     False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20,
+                                     queue, 3, None)
         else:
             button4: any = ""
             pop3: any = ""
@@ -2304,13 +2393,13 @@ class Pages:
                                                                  False, True, False, 100)
                                 self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
                                                                    (100, 100, 100), [width // 2, 120],
-                                                                   255, 3, (1, 2), (1, 2), True, False)
+                                                                   255, 3, (1, 2), (1, 2), True, False, None)
                             else:
                                 self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
                                                                  False, True, False, 100)
                                 self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
                                                                    (100, 100, 100), [width // 2, 120],
-                                                                   255, 3, (1, 2), (1, 2), True, False)
+                                                                   255, 3, (1, 2), (1, 2), True, False, None)
                         elif not json_str["setting"][name_index]["full_screen"] and width != 1280 and height != 720:
                             width = 1280
                             height = 720
@@ -2321,13 +2410,13 @@ class Pages:
                                                                  False, True, False, 100)
                                 self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
                                                                    (100, 100, 100), [width // 2, 120],
-                                                                   255, 3, (1, 2), (1, 2), True, False)
+                                                                   255, 3, (1, 2), (1, 2), True, False, None)
                             else:
                                 self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
                                                                  False, True, False, 100)
                                 self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
                                                                    (100, 100, 100), [width // 2, 120],
-                                                                   255, 3, (1, 2), (1, 2), True, False)
+                                                                   255, 3, (1, 2), (1, 2), True, False, None)
                         self.account: int = name_index
                         volume = json_str["setting"][self.account]["sound"]
                         json_str2["log_user"] = name_index
@@ -2368,13 +2457,13 @@ class Pages:
                                                                  False, True, False, 100)
                                 self.custom_text: any = CustomText("你施朗了", "assets/fonts/Title.TTF", 232,
                                                                    (100, 100, 100), [width // 2, 120], 255,
-                                                                   3, (1, 2), (1, 2), True, False)
+                                                                   3, (1, 2), (1, 2), True, False, None)
                             else:
                                 self.bg: any = DynamicBackground("assets/images/Level1.jpg", 5, width, height, False,
                                                                  False, True, False, 100)
                                 self.custom_text: any = CustomText("施朗猎人", "assets/fonts/Title.TTF", 232,
                                                                    (100, 100, 100), [width // 2, 120], 255,
-                                                                   3, (1, 2), (1, 2), True, False)
+                                                                   3, (1, 2), (1, 2), True, False, None)
                     self.account: int = -1
                     json_str2["log_user"] = -1
                     f: any = open("data/Idea.json", "w", encoding="UTF-8")
@@ -2419,13 +2508,14 @@ class Pages:
         self.now_time: int = pygame.time.get_ticks()
         self.can_sleep: bool = True
         self.can_click: bool = False
+        queue: list = []
         running: bool = True
         pop: any = PopupMessage(350, 100, image_usually_use[5], 500,
                                 "注册成功", (255, 255, 255), "assets/fonts/Text.TTF", 40, 100, 30,
-                                False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20)
+                                False, 0, 0, "assets/images/Tick.png", (60, 60), 25, 20, queue, 0, None)
         pop2: any = PopupMessage(350, 100, image_usually_use[5], 500,
                                  "不能使用这个名称", (255, 255, 255), "assets/fonts/Text.TTF", 32, 90, 35,
-                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20)
+                                 False, 0, 0, "assets/images/Cross.png", (60, 60), 25, 20, queue, 1, None)
         button1: any = Button("注册", 50, 460, 400, 100, image_usually_use[0], image_usually_use[1],
                               image_usually_use[2], 1, 0, (1, 4), (7, 8))
         button2: any = Button("返回", 50, 565, 400, 100, image_usually_use[0], image_usually_use[1],
@@ -2481,8 +2571,8 @@ class Pages:
                     for x in range(len(json_str3)):
                         json_str4["gun_level"][len(json_str4["gun_level"]) - 1].append(0)
                     json_str4["setting"].append({"bullet_visible": True, "dock_hidden": True,
-                                                 "full_screen": False, "sound": 0.2, "damage_visible": False,
-                                                 "float_damage_visible": False, "scroll_speed": 1})
+                                                 "full_screen": False, "sound": 0.5, "damage_visible": True,
+                                                 "float_damage_visible": False, "scroll_speed": 3})
                     json_str4["equipment_level"].append([])
                     for x in range(len(json_str5)):
                         json_str4["equipment_level"][len(json_str4["equipment_level"]) - 1].append(-1)
@@ -2783,23 +2873,17 @@ class Pages:
             text1: any = CustomText(f"{hp}/{json_str2[f"{json_str["level"][self.account]}-{level}"]["basic"]["HP"]
                                     [difficult]}",
                                     "assets/fonts/Text.TTF", 50,
-                                    (255, 255, 255, 0), [300, 50], 255, 1, (7, 32), (1, 2), False, False)
+                                    (255, 255, 255, 0), [300, 50], 255, 1, (7, 32), (1, 2), False, False, None)
             text2: any = CustomText(f"{enemies}/{json_str2[f"{json_str["level"][self.account]}-{level}"]["basic"]
                                     ["enemy"][difficult]}",
                                     "assets/fonts/Text.TTF", 50,
-                                    (255, 255, 255), [600, 50], 255, 1, (13, 32), (1, 2), False, False)
-            text3: any = CustomText(f"{bullets}/{json_str2[f"{json_str["level"][self.account]}-{level}"]["basic"]
-                                    ["bullets"][difficult]}",
+                                    (255, 255, 255), [600, 50], 255, 1, (13, 32), (1, 2), False, False, None)
+            text3: any = CustomText(f"{bullets}",
                                     "assets/fonts/Text.TTF", 50,
-                                    (255, 255, 255), [900, 50], 255, 1, (19, 32), (1, 2), False, False)
+                                    (255, 255, 255), [900, 50], 255, 1, (19, 32), (1, 2), False, False, None)
             text4: any = CustomText(f"{mp}",
                                     "assets/fonts/Text.TTF", 50,
-                                    (255, 255, 255), [900, 50], 255, 1, (25, 32), (1, 2), False, False)
-            if bullets == "∞":
-                text3.text = "∞"
-            else:
-                text3.text = f"{bullets}/{json_str2[f"{json_str["level"][self.account]}-{level}"]["basic"]
-                                                               ["bullets"][difficult]}"
+                                    (255, 255, 255), [900, 50], 255, 1, (25, 32), (1, 2), False, False, None)
             screen.fill((200, 200, 200))
             if json_str["setting"][self.account]["dock_hidden"] and not pause:
                 if dock_rect.colliderect(gun.gun_rect):
@@ -2912,14 +2996,14 @@ class Pages:
                                                             False, False, (1, 2), (1, 2))
                         pause_text: any = CustomText("NICE", "assets/fonts/text.TTF", 150,
                                                      (255, 255, 255), [width // 2, height // 4],
-                                                     255, 0, (1, 2), (3, 4), True, False)
+                                                     255, 0, (1, 2), (3, 4), True, False, None)
                     else:
                         pause_background_image: any = Image("assets/images/Load_background.png", width,
                                                             height, width // 2, height // 2, 3, 100,
                                                             False, False, (1, 2), (1, 2))
                         pause_text: any = CustomText("暂停", "assets/fonts/text.TTF", 150,
                                                      (255, 255, 255), [width // 2, height // 4],
-                                                     255, 0, (1, 2), (3, 4), True, False)
+                                                     255, 0, (1, 2), (3, 4), True, False, None)
                     button1: any = Button("退出", width // 4, height // 16, 400, 100,
                                           image_usually_use[0], image_usually_use[1], image_usually_use[2], 1,
                                           0, (1, 4), (1, 16))
@@ -2980,27 +3064,47 @@ class Pages:
         self.now_time: int = pygame.time.get_ticks()
         self.can_sleep: bool = True
         self.can_click: bool = False
+        pop: list = []
+        queue: list = []
+        enable_pop: bool = False
         change_page: bool = False
         running: bool = True
         button1: any = Button("继续", 50, 230, 400, 100,
                               image_usually_use[0], image_usually_use[1],
                               image_usually_use[2], 1, 0, (1, 2), (7, 8))
         text1: any = CustomText("作战结束", "assets/fonts/Text.TTF", 100, (255, 255, 255),
-                                [width // 2, height // 4], 255, 0, (1, 2), (1, 4), True, False)
+                                [width // 2, height // 4], 255, 0, (1, 2), (1, 4), True, False, None)
         with open("data/User.json", encoding="UTF-8") as f:
             json_str: any = json.load(f)
             f.close()
         with open("data/Level.json", encoding="UTF-8") as f:
             json_str2: any = json.load(f)
             f.close()
+        with open("data/Build.json", encoding="UTF-8") as f:
+            json_str4: any = json.load(f)
+            f.close()
         picture: int = 8
         if self.turn_page != 0:
-            if (json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_equipments"] is not None
-                    and json_str["equipment_level"][self.account][
+            if json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_equipments"] is not None:
+                for x in range(len(json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]
+                                   ["Unlock_equipments"])):
+                    pop.append(PopupMessage(350, 100, image_usually_use[5], 2000,
+                                            f"解锁了{json_str4[f"{json_str2[
+                                                f"Level{json_str["level"][self.account]}"
+                                            ][f"{level - 1}"]["Unlock_equipments"][x]}"]["Chinese_name"]}！",
+                                            (255, 255, 255), "assets/fonts/Text.TTF", 40,
+                                            100, 30, False, 0, 0,
+                                            "assets/images/Tick.png", (60, 60), 25,
+                                            20, queue, len(pop), (10, 0)))
+                    if json_str["equipment_level"][self.account][
                         json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]
-                        ["Unlock_equipments"]] == -1):
-                json_str["equipment_level"][self.account][
-                    json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_equipments"]] = 0
+                                 ["Unlock_equipments"][x]] == -1:
+                        json_str["equipment_level"][self.account][
+                            json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_equipments"]
+                            [x]] = 0
+            if json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
+                                                               [f"{level - 1}"]["Level_id"]] == 0:
+                enable_pop: bool = True
             if json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Type"] == 0:
                 complete: int = 0
                 if self.turn_page == -1:
@@ -3017,10 +3121,20 @@ class Pages:
                     json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
                                                                 [f"{level - 1}"]["Level_id"]] = complete
                 if json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Unlock_Level_id"] is not None:
-                    if json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
-                                                                   [f"{level - 1}"]["Unlock_Level_id"]] == -1:
-                        json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
-                                                                    [f"{level - 1}"]["Unlock_Level_id"]] = 0
+                    for x in range(len(json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]
+                                       ["Unlock_Level_id"])):
+                        pop.append(PopupMessage(350, 100, image_usually_use[5], 2000,
+                                                f"解锁了{json_str2[f"Level{json_str["level"][self.account]}"][
+                                                    f"{json_str2[f"Level{json_str["level"][self.account]}"]
+                                                        [f"{level - 1}"]["Unlock_Level_id"][x]}"]["Title"]}！",
+                                                (255, 255, 255), "assets/fonts/Text.TTF", 40,
+                                                100, 30, False, 0, 0,
+                                                "assets/images/Tick.png", (60, 60), 25,
+                                                20, queue, len(pop), (10, 0)))
+                        if json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
+                                                                       [f"{level - 1}"]["Unlock_Level_id"][x]] == -1:
+                            json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"]
+                                                                        [f"{level - 1}"]["Unlock_Level_id"][x]] = 0
             elif json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]["Type"] == 1:
                 json_str["progress"][self.account][json_str2[f"Level{json_str["level"][self.account]}"][f"{level - 1}"]
                                                             ["Level_id"]] = 3
@@ -3032,6 +3146,9 @@ class Pages:
                 f.close()
         images: any = Image(f"assets/images/{picture}.png", 100, 100, 0,
                             50, 0, 255, False, False, (1, 2), (1, 2))
+        if enable_pop:
+            for x in range(len(pop)):
+                pop[x].activate()
         while running:
             if not self.link_up.can_exit:
                 self.sleep(300)
@@ -3045,6 +3162,9 @@ class Pages:
                 self.turn_page: int = 0
                 self.link_up.activate()
                 self.can_click: bool = False
+            if self.can_click:
+                for x in range(len(pop)):
+                    pop[x].draw()
             self.click.click()
             if self.link_up.can_exit:
                 if change_page:
