@@ -1,0 +1,46 @@
+{
+  "0": {
+    "describe": "bullet_visible",
+    "Chinese_describe": "使用文本显示子弹数量",
+    "default": true
+  },
+  "1": {
+    "describe": "dock_hidden",
+    "Chinese_describe": "数值面板碰到鼠标时透明",
+    "default": true
+  },
+  "2": {
+    "describe": "full_screen",
+    "Chinese_describe": "开启全屏",
+    "default": false
+  },
+  "3": {
+    "describe": "damage_visible",
+    "Chinese_describe": "显示伤害",
+    "default": true
+  },
+  "4": {
+    "describe": "float_damage_visible",
+    "Chinese_describe": "显示浮点伤害",
+    "default": false
+  },
+  "5": {
+    "describe": "mouse_action_visible",
+    "Chinese_describe": "显示鼠标操作",
+    "default": false
+  },
+  "6": {
+    "describe": "sound",
+    "Chinese_describe": "音量",
+    "default": 0.5,
+    "upper_limit": 1.0,
+    "lower_limit": 0.0
+  },
+  "7": {
+    "describe": "scroll_speed",
+    "Chinese_describe": "滚动速度",
+    "default": 3,
+    "upper_limit": 10,
+    "lower_limit": 1
+  }
+}

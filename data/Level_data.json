@@ -13,67 +13,79 @@
       "popups0": {
         "visible_time/ms": 1000,
         "time": 2000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/Mouse_intro.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 50,
+        "input_height": 85,
+        "input_x": 200,
         "input_y": 0,
         "text": "拖动鼠标移动枪械",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 300,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups1": {
         "visible_time/ms": 4000,
         "time": 2000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/Middle_button.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 50,
+        "input_height": 85,
+        "input_x": 200,
         "input_y": 0,
-        "text": "枪口下方是此枪剩余的子弹数，消耗完需推滚轮以换弹，可以按鼠标中键终止换弹",
+        "text": "枪下方是枪剩余的子弹数，需推滚轮换弹，可按鼠标中键终止换弹",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 260,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups2": {
         "visible_time/ms": 7000,
         "time": 2000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/Left_button.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 50,
+        "input_height": 85,
+        "input_x": 200,
         "input_y": 0,
-        "text": "左键开枪，长按可蓄力",
+        "text": "左键开枪，长按可蓄力攻击，造成极高伤害",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 260,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups3": {
         "visible_time/ms": 10000,
         "time": 4000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
         "input_image": null,
         "lateral_display": true,
@@ -88,7 +100,11 @@
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "0": {
         "id": "Normal_cat",
@@ -242,8 +258,8 @@
     "entity0": {
       "popups0": {
         "visible_time/ms": 1000,
-        "time": 2000,
-        "width": "width",
+        "time": 1000,
+        "width": 1280,
         "height": 100,
         "input_image": null,
         "lateral_display": true,
@@ -258,71 +274,87 @@
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups1": {
         "visible_time/ms": 3000,
-        "time": 2000,
-        "width": "width",
+        "time": 1000,
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/HP.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 80,
+        "input_height": 80,
+        "input_x": 200,
         "input_y": 0,
-        "text": "第一个是血量，当施朗到达底部时就会减少血量，血量耗尽就会失败",
+        "text": "第一个是血量，当施朗触底时会减血量，血量耗尽会失败",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 290,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups2": {
         "visible_time/ms": 5000,
-        "time": 2000,
-        "width": "width",
+        "time": 1000,
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/Enemies.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 80,
+        "input_height": 80,
+        "input_x": 200,
         "input_y": 0,
-        "text": "第二个是敌人，每次击杀施朗或施朗触底都可以增加进度，进度满时胜利",
+        "text": "第二个是敌人，每次施朗消失都可以增加进度，进度满时胜利",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 290,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups3": {
         "visible_time/ms": 7000,
         "time": 1000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/Bullets.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 80,
+        "input_height": 80,
+        "input_x": 200,
         "input_y": 0,
         "text": "第三个是子弹数，每次换弹都会消耗子弹",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 290,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "0": {
         "id": "Normal_cat",
-        "visible_time/ms": 2000,
+        "visible_time/ms": 10000,
         "path": "Normal",
         "pos": [
           640,
@@ -331,7 +363,7 @@
       },
       "1": {
         "id": "Normal_cat",
-        "visible_time/ms": 3000,
+        "visible_time/ms": 12000,
         "path": "Normal",
         "pos": [
           1200,
@@ -340,7 +372,7 @@
       },
       "2": {
         "id": "Normal_cat",
-        "visible_time/ms": 4000,
+        "visible_time/ms": 14000,
         "path": "Normal",
         "pos": [
           80,
@@ -349,7 +381,7 @@
       },
       "3": {
         "id": "Normal_cat",
-        "visible_time/ms": 5000,
+        "visible_time/ms": 16000,
         "path": "Left_down",
         "pos": [
           640,
@@ -358,7 +390,7 @@
       },
       "4": {
         "id": "Normal_cat",
-        "visible_time/ms": 5000,
+        "visible_time/ms": 16000,
         "path": "Normal",
         "pos": [
           640,
@@ -367,7 +399,7 @@
       },
       "5": {
         "id": "Normal_cat",
-        "visible_time/ms": 5000,
+        "visible_time/ms": 16000,
         "path": "Right_down",
         "pos": [
           640,
@@ -376,7 +408,7 @@
       },
       "6": {
         "id": "Normal_cat",
-        "visible_time/ms": 6000,
+        "visible_time/ms": 20000,
         "path": "Normal",
         "pos": [
           80,
@@ -385,7 +417,7 @@
       },
       "7": {
         "id": "Normal_cat",
-        "visible_time/ms": 6500,
+        "visible_time/ms": 21000,
         "path": "Normal",
         "pos": [
           640,
@@ -394,7 +426,7 @@
       },
       "8": {
         "id": "Normal_cat",
-        "visible_time/ms": 7000,
+        "visible_time/ms": 22000,
         "path": "Normal",
         "pos": [
           1200,
@@ -403,8 +435,8 @@
       },
       "9": {
         "id": "Normal_cat",
-        "visible_time/ms": 8000,
-        "path": "Left",
+        "visible_time/ms": 23000,
+        "path": "Normal",
         "pos": [
           640,
           0
@@ -412,7 +444,7 @@
       }
     },
     "entity1": {
-            "0": {
+      "0": {
         "id": "Normal_cat",
         "visible_time/ms": 2000,
         "path": "Normal",
@@ -554,12 +586,60 @@
       "HP": [3, 1],
       "bullets": ["∞", "∞"],
       "enemy": [15, 20],
-      "popups": [0, 0],
+      "popups": [2, 0],
       "cost_recover_speed": [500, 1000],
       "deployment_ceiling": [5, 1],
       "danger_line": [720, 720]
     },
     "entity0": {
+      "popups0": {
+        "visible_time/ms": 3000,
+        "time": 1000,
+        "width": 600,
+        "height": 100,
+        "input_image": "assets/images/Primary_High_speed_cat1.svg",
+        "lateral_display": false,
+        "input_width": 70,
+        "input_height": 80,
+        "input_x": 20,
+        "input_y": 0,
+        "text": "新敌人：高速施朗，移速比普通施朗更快",
+        "text_size": 32,
+        "text_x": 100,
+        "text_y": 35,
+        "x1": 1,
+        "x2": 2,
+        "y1": 7,
+        "y2": 8,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
+      },
+      "popups1": {
+        "visible_time/ms": 8000,
+        "time": 1000,
+        "width": 600,
+        "height": 100,
+        "input_image": "assets/images/Green_cat1.svg",
+        "lateral_display": false,
+        "input_width": 70,
+        "input_height": 80,
+        "input_x": 20,
+        "input_y": 0,
+        "text": "新敌人：绿色施朗，防御和血量比普通施朗更高",
+        "text_size": 32,
+        "text_x": 100,
+        "text_y": 35,
+        "x1": 1,
+        "x2": 2,
+        "y1": 7,
+        "y2": 8,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
+      },
       "0": {
         "id": "Normal_cat",
         "visible_time/ms": 2000,
@@ -882,10 +962,10 @@
   "1-4": {
     "basic": {
       "HP": [2, 1],
-      "bullets": [1, 1],
+      "bullets": [0, 0],
       "enemy": [10, 15],
-      "popups": [4, 0],
-      "cost_recover_speed": [200, 220],
+      "popups": [5, 0],
+      "cost_recover_speed": [200, 210],
       "deployment_ceiling": [10, 2],
       "danger_line": [720, 720]
     },
@@ -893,47 +973,55 @@
       "popups0": {
         "visible_time/ms": 1000,
         "time": 2000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/Right_button.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 50,
+        "input_height": 85,
+        "input_x": 200,
         "input_y": 0,
         "text": "枪口左侧的是建造物，可以按下鼠标右键建造，但建造需要消耗费用",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 260,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups1": {
-        "visible_time/ms": 3000,
+        "visible_time/ms": 4000,
         "time": 2000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/MP.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 80,
+        "input_height": 80,
+        "input_x": 200,
         "input_y": 0,
         "text": "上方第四个便是费用，费用会随时间增长",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 290,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups2": {
-        "visible_time/ms": 5000,
+        "visible_time/ms": 7000,
         "time": 2000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
         "input_image": null,
         "lateral_display": true,
@@ -948,31 +1036,63 @@
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "popups3": {
-        "visible_time/ms": 7000,
+        "visible_time/ms": 10000,
         "time": 2000,
-        "width": "width",
+        "width": 1280,
         "height": 100,
-        "input_image": null,
+        "input_image": "assets/images/Middle_button.png",
         "lateral_display": true,
-        "input_width": 0,
-        "input_height": 0,
-        "input_x": 0,
+        "input_width": 50,
+        "input_height": 85,
+        "input_x": 200,
         "input_y": 0,
         "text": "之后，若未处于换弹状态，就可以通过鼠标滚轮切换建造物",
         "text_size": 32,
-        "text_x": 60,
+        "text_x": 260,
         "text_y": 35,
         "x1": 1,
         "x2": 2,
         "y1": 15,
-        "y2": 16
+        "y2": 16,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
+      },
+      "popups4": {
+        "visible_time/ms": 13000,
+        "time": 1000,
+        "width": 600,
+        "height": 100,
+        "input_image": "assets/images/Heavy_cat1.svg",
+        "lateral_display": false,
+        "input_width": 70,
+        "input_height": 80,
+        "input_x": 20,
+        "input_y": 0,
+        "text": "新敌人：重装施朗，防御极高，可通过地雷击杀",
+        "text_size": 32,
+        "text_x": 100,
+        "text_y": 35,
+        "x1": 1,
+        "x2": 2,
+        "y1": 7,
+        "y2": 8,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
       },
       "0": {
-        "id": "Normal_cat",
-        "visible_time/ms": 2000,
+        "id": "Heavy_cat",
+        "visible_time/ms": 12000,
         "path": "Normal",
         "pos": [
           640,
@@ -981,7 +1101,7 @@
       },
       "1": {
         "id": "Heavy_cat",
-        "visible_time/ms": 3000,
+        "visible_time/ms": 13000,
         "path": "Normal",
         "pos": [
           640,
@@ -990,7 +1110,7 @@
       },
       "2": {
         "id": "Heavy_cat",
-        "visible_time/ms": 4000,
+        "visible_time/ms": 14000,
         "path": "Normal",
         "pos": [
           640,
@@ -999,7 +1119,7 @@
       },
       "3": {
         "id": "Heavy_cat",
-        "visible_time/ms": 5000,
+        "visible_time/ms": 15000,
         "path": "Left",
         "pos": [
           280,
@@ -1008,7 +1128,7 @@
       },
       "4": {
         "id": "Heavy_cat",
-        "visible_time/ms": 5000,
+        "visible_time/ms": 15000,
         "path": "Right",
         "pos": [
           1000,
@@ -1017,7 +1137,7 @@
       },
       "5": {
         "id": "Heavy_cat",
-        "visible_time/ms": 8000,
+        "visible_time/ms": 18000,
         "path": "Left_down",
         "pos": [
           640,
@@ -1026,7 +1146,7 @@
       },
       "6": {
         "id": "Heavy_cat",
-        "visible_time/ms": 8000,
+        "visible_time/ms": 18000,
         "path": "Right_down",
         "pos": [
           640,
@@ -1035,7 +1155,7 @@
       },
       "7": {
         "id": "Heavy_cat",
-        "visible_time/ms": 9000,
+        "visible_time/ms": 19000,
         "path": "Normal",
         "pos": [
           640,
@@ -1044,7 +1164,7 @@
       },
       "8": {
         "id": "Heavy_cat",
-        "visible_time/ms": 11000,
+        "visible_time/ms": 21000,
         "path": "Normal",
         "pos": [
           320,
@@ -1053,7 +1173,7 @@
       },
       "9": {
         "id": "Heavy_cat",
-        "visible_time/ms": 11000,
+        "visible_time/ms": 21000,
         "path": "Normal",
         "pos": [
           960,
@@ -1063,7 +1183,7 @@
     },
     "entity1": {
       "0": {
-        "id": "Normal_cat",
+        "id": "Heavy_cat",
         "visible_time/ms": 2000,
         "path": "Normal",
         "pos": [
@@ -1538,6 +1658,997 @@
       "31": {
         "id": "Normal_cat",
         "visible_time/ms": 58000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      }
+    }
+  },
+  "1-6": {
+    "basic": {
+      "HP": [5, 1],
+      "bullets": ["∞", "∞"],
+      "enemy": [10, 20],
+      "popups": [1, 0],
+      "cost_recover_speed": [800, 700],
+      "deployment_ceiling": [5, 2],
+      "danger_line": [720, 720]
+    },
+    "entity0": {
+      "popups0": {
+        "visible_time/ms": 1000,
+        "time": 2000,
+        "width": 600,
+        "height": 100,
+        "input_image": "assets/images/Defend_Cat1.svg",
+        "lateral_display": false,
+        "input_width": 70,
+        "input_height": 80,
+        "input_x": 20,
+        "input_y": 0,
+        "text": "新敌人：庇护施朗，施朗中的首领，会让全场的施朗获得庇护效果",
+        "text_size": 32,
+        "text_x": 100,
+        "text_y": 35,
+        "x1": 1,
+        "x2": 2,
+        "y1": 7,
+        "y2": 8,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
+      },
+      "0": {
+        "id": "Defend_Cat",
+        "visible_time/ms": 1000,
+        "path": null,
+        "custom_path": {
+          "Status_count": 2,
+          "Status": [
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 40000
+            },
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 999999
+            }
+          ]
+        },
+        "pos": [
+          640,
+          240
+        ]
+      },
+      "1": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 2000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "2": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 2000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "3": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 2000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "4": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 5000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "5": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 10000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 10000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "7": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 10000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "8": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 12000,
+        "path": "Left",
+        "pos": [
+          320,
+          0
+        ]
+      },
+      "9": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 12000,
+        "path": "Right",
+        "pos": [
+          960,
+          0
+        ]
+      }
+    },
+    "entity1": {
+      "0": {
+        "id": "Defend_Cat",
+        "visible_time/ms": 1000,
+        "path": null,
+        "custom_path": {
+          "Status_count": 2,
+          "Status": [
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 30000
+            },
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 999999
+            }
+          ]
+        },
+        "pos": [
+          320,
+          240
+        ]
+      },
+      "1": {
+        "id": "Defend_Cat",
+        "visible_time/ms": 1000,
+        "path": null,
+        "custom_path": {
+          "Status_count": 2,
+          "Status": [
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 60000
+            },
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 999999
+            }
+          ]
+        },
+        "pos": [
+          960,
+          240
+        ]
+      },
+      "2": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 2000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "3": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 2000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "4": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 2000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "5": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 5000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 10000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "7": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 10000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "8": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 10000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "9": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 12000,
+        "path": "Left",
+        "pos": [
+          320,
+          0
+        ]
+      },
+      "10": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 12000,
+        "path": "Right",
+        "pos": [
+          960,
+          0
+        ]
+      },
+      "11": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 15000,
+        "path": "Right",
+        "pos": [
+          960,
+          0
+        ]
+      },
+      "12": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 15000,
+        "path": "Left",
+        "pos": [
+          320,
+          0
+        ]
+      },
+      "13": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 15000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "14": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 23000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "15": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 23500,
+        "path": "Normal",
+        "pos": [
+          580,
+          0
+        ]
+      },
+      "16": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 23500,
+        "path": "Normal",
+        "pos": [
+          700,
+          0
+        ]
+      },
+      "17": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 24000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "18": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 24500,
+        "path": "Normal",
+        "pos": [
+          580,
+          0
+        ]
+      },
+      "19": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 24500,
+        "path": "Normal",
+        "pos": [
+          700,
+          0
+        ]
+      }
+    }
+  },
+  "1-7": {
+    "basic": {
+      "HP": [3, 1],
+      "bullets": ["∞", "∞"],
+      "enemy": [15, 30],
+      "popups": [1, 0],
+      "cost_recover_speed": [1200, 1200],
+      "deployment_ceiling": [3, 1],
+      "danger_line": [720, 720]
+    },
+    "entity0": {
+      "popups0": {
+        "visible_time/ms": 10000,
+        "time": 2000,
+        "width": 600,
+        "height": 100,
+        "input_image": "assets/images/Attack_Cat1.svg",
+        "lateral_display": false,
+        "input_width": 70,
+        "input_height": 80,
+        "input_x": 20,
+        "input_y": 0,
+        "text": "新敌人：嗜血施朗，施朗中的首领，会让全场的施朗获得嗜血效果",
+        "text_size": 32,
+        "text_x": 100,
+        "text_y": 35,
+        "x1": 1,
+        "x2": 2,
+        "y1": 7,
+        "y2": 8,
+        "text_center_x": false,
+        "text_center_y": true,
+        "input_center_x": false,
+        "input_center_y": true
+      },
+      "0": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 0,
+        "path": null,
+        "custom_path": {
+          "Status_count": 5,
+          "Status": [
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 1000
+            },
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 2000
+            },
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                true
+              ],
+              "time/ms": 2000
+            },
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 4000
+            },
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 999999
+            }
+          ]
+        },
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+        "id": "Attack_Cat",
+        "visible_time/ms": 10000,
+        "path": null,
+        "custom_path": {
+          "Status_count": 2,
+          "Status": [
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 25000
+            },
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 999999
+            }
+          ]
+        },
+        "pos": [
+          640,
+          240
+        ]
+      },
+      "2": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 12000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "3": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 12000,
+        "path": "Left_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "4": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 12000,
+        "path": "Right_down",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "5": {
+        "id": "Green_cat",
+        "visible_time/ms": 14000,
+        "path": "Right",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Green_cat",
+        "visible_time/ms": 16000,
+        "path": "Left",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "7": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 20000,
+        "path": "Right",
+        "pos": [
+          960,
+          0
+        ]
+      },
+      "8": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 20000,
+        "path": "Left",
+        "pos": [
+          320,
+          0
+        ]
+      },
+      "9": {
+        "id": "Green_cat",
+        "visible_time/ms": 25000,
+        "path": "Normal",
+        "pos": [
+          600,
+          0
+        ]
+      },
+      "10": {
+        "id": "Green_cat",
+        "visible_time/ms": 25000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "11": {
+        "id": "Green_cat",
+        "visible_time/ms": 25000,
+        "path": "Normal",
+        "pos": [
+          680,
+          0
+        ]
+      },
+      "12": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 27000,
+        "path": "Normal",
+        "pos": [
+          600,
+          0
+        ]
+      },
+      "13": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 27000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "14": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 27000,
+        "path": "Normal",
+        "pos": [
+          680,
+          0
+        ]
+      }
+    },
+    "entity1": {
+      "0": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 0,
+        "path": null,
+        "custom_path": {
+          "Status_count": 5,
+          "Status": [
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 1000
+            },
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 2000
+            },
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                true
+              ],
+              "time/ms": 2000
+            },
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 4000
+            },
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 999999
+            }
+          ]
+        },
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "1": {
+        "id": "Attack_Cat",
+        "visible_time/ms": 12000,
+        "path": null,
+        "custom_path": {
+          "Status_count": 2,
+          "Status": [
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 14000
+            },
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 999999
+            }
+          ]
+        },
+        "pos": [
+          640,
+          240
+        ]
+      },
+      "2": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 12000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "3": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 12000,
+        "path": "Left",
+        "pos": [
+          320,
+          0
+        ]
+      },
+      "4": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 12000,
+        "path": "Right",
+        "pos": [
+          960,
+          0
+        ]
+      },
+      "5": {
+        "id": "Green_cat",
+        "visible_time/ms": 14000,
+        "path": "Right",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "6": {
+        "id": "Green_cat",
+        "visible_time/ms": 14000,
+        "path": "Left",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "7": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 20000,
+        "path": "Right",
+        "pos": [
+          960,
+          0
+        ]
+      },
+      "8": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 20000,
+        "path": "Left",
+        "pos": [
+          320,
+          0
+        ]
+      },
+      "9": {
+        "id": "Green_cat",
+        "visible_time/ms": 25000,
+        "path": "Normal",
+        "pos": [
+          320,
+          0
+        ]
+      },
+      "10": {
+        "id": "Green_cat",
+        "visible_time/ms": 25000,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "11": {
+        "id": "Green_cat",
+        "visible_time/ms": 25000,
+        "path": "Normal",
+        "pos": [
+          960,
+          0
+        ]
+      },
+      "12": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 25500,
+        "path": "Normal",
+        "pos": [
+          320,
+          0
+        ]
+      },
+      "13": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 25500,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "14": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 25500,
+        "path": "Normal",
+        "pos": [
+          960,
+          0
+        ]
+      },
+      "15": {
+        "id": "Attack_Cat",
+        "visible_time/ms": 27000,
+        "path": null,
+        "custom_path": {
+          "Status_count": 2,
+          "Status": [
+            {
+              "direction": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 8000
+            },
+            {
+              "direction": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "time/ms": 999999
+            }
+          ]
+        },
+        "pos": [
+          640,
+          240
+        ]
+      },
+      "16": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 27500,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "17": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 28000,
+        "path": "Normal",
+        "pos": [
+          600,
+          0
+        ]
+      },
+      "18": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 28500,
+        "path": "Normal",
+        "pos": [
+          560,
+          0
+        ]
+      },
+      "19": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 29000,
+        "path": "Normal",
+        "pos": [
+          520,
+          0
+        ]
+      },
+      "20": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 29500,
+        "path": "Normal",
+        "pos": [
+          560,
+          0
+        ]
+      },
+      "21": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 30000,
+        "path": "Normal",
+        "pos": [
+          600,
+          0
+        ]
+      },
+      "22": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 30500,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "23": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 31000,
+        "path": "Normal",
+        "pos": [
+          680,
+          0
+        ]
+      },
+      "24": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 31500,
+        "path": "Normal",
+        "pos": [
+          720,
+          0
+        ]
+      },
+      "25": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 32000,
+        "path": "Normal",
+        "pos": [
+          760,
+          0
+        ]
+      },
+      "26": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 32500,
+        "path": "Normal",
+        "pos": [
+          720,
+          0
+        ]
+      },
+      "27": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 33000,
+        "path": "Normal",
+        "pos": [
+          680,
+          0
+        ]
+      },
+      "28": {
+        "id": "Primary_High_speed_cat",
+        "visible_time/ms": 33500,
+        "path": "Normal",
+        "pos": [
+          640,
+          0
+        ]
+      },
+      "29": {
+        "id": "Heavy_cat",
+        "visible_time/ms": 35000,
         "path": "Normal",
         "pos": [
           640,

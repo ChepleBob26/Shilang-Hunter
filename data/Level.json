@@ -3,41 +3,44 @@
     "0": {
       "Level_id": 0,
       "Title": "1-1 枪械",
-      "Description": "学习使用枪械攻击。",
+      "Description": "使用枪械攻击。",
       "Lock_Description": "",
       "Position": [
-        180,
+        256,
         200
       ],
       "Type": 0,
       "Unlock_Level_id": [1],
-      "Unlock_equipments": null
+      "Unlock_equipments": null,
+      "Unlock_charms": null
     },
     "1": {
       "Level_id": 1,
       "Title": "1-2 入侵",
-      "Description": "一批施朗发起了进攻，请使用枪械进行反击。",
+      "Description": "一批施朗发起了进攻。",
       "Lock_Description": "完成1-1",
       "Position": [
-        413,
+        512,
         200
       ],
       "Type": 0,
       "Unlock_Level_id": [2],
-      "Unlock_equipments": null
+      "Unlock_equipments": null,
+      "Unlock_charms": null
     },
     "2": {
       "Level_id": 2,
       "Title": "1-3 攻守",
-      "Description": "一些高速施朗和绿色施朗也加入了战斗。",
+      "Description": "一些高速施朗和绿色施朗加入了战斗。",
       "Lock_Description": "完成1-2",
       "Position": [
-        636,
+        768,
         200
       ],
       "Type": 0,
       "Unlock_Level_id": [3],
-      "Unlock_equipments": [0]
+      "Unlock_equipments": [0],
+      "Unlock_charms": null
     },
     "3": {
       "Level_id": 3,
@@ -45,25 +48,55 @@
       "Description": "一群重甲施朗发起了进攻。",
       "Lock_Description": "完成1-3",
       "Position": [
-        869,
+        1024,
         200
       ],
       "Type": 0,
-      "Unlock_Level_id": [4],
-      "Unlock_equipments": null
+      "Unlock_Level_id": [5],
+      "Unlock_equipments": null,
+      "Unlock_charms": null
     },
     "4": {
       "Level_id": 4,
       "Title": "S1-1 据守",
-      "Description": "你闯入了一群施朗的基地，这里有重兵把守。",
-      "Lock_Description": "完成1-4",
+      "Description": "你闯入了一群施朗的基地。",
+      "Lock_Description": "？？？",
       "Position": [
-        1100,
-        200
+        640,
+        600
       ],
       "Type": 1,
       "Unlock_Level_id": null,
-      "Unlock_equipments": null
+      "Unlock_equipments": null,
+      "Unlock_charms": [0]
+    },
+    "5": {
+      "Level_id": 5,
+      "Title": "1-5 防守",
+      "Description": "庇护施朗和多种施朗组成了防线。",
+      "Lock_Description": "完成1-4",
+      "Position": [
+        320,
+        400
+      ],
+      "Type": 0,
+      "Unlock_Level_id": [6],
+      "Unlock_equipments": null,
+      "Unlock_charms": null
+    },
+    "6": {
+      "Level_id": 6,
+      "Title": "1-6 进攻",
+      "Description": "嗜血施朗带领多种施朗发起了进攻。",
+      "Lock_Description": "完成1-5",
+      "Position": [
+        960,
+        400
+      ],
+      "Type": 0,
+      "Unlock_Level_id": [4],
+      "Unlock_equipments": null,
+      "Unlock_charms": null
     }
   }
 }

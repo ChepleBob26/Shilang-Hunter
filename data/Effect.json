@@ -2,7 +2,7 @@
   "0": {
     "name": "Shield",
     "give": [1],
-    "give_numerical": [3],
+    "give_numerical": [5],
     "enemy_type": [0, 1, 2],
     "Image_type": ".png"
   },
